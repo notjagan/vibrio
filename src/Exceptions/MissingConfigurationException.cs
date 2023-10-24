@@ -1,4 +1,4 @@
-﻿namespace vibrio.src
+﻿namespace vibrio.src.Exceptions
 {
     public class MissingConfigurationException : Exception
     {

@@ -1,27 +1,27 @@
 ﻿using osu.Framework.IO.Network;
 using osu.Game.Beatmaps;
-using vibrio.src;
+using vibrio.src.Exceptions;
 
 namespace vibrio.Beatmaps {
     public class LocalBeatmapCache : IBeatmapProvider {
-        private readonly string _cacheDirectory;
-        private readonly string _osuRootUrl;
+        private readonly string cacheDirectory;
+        private readonly string osuRootUrl;
 
         public LocalBeatmapCache(IConfiguration config) {
-            _cacheDirectory = config["CacheDirectory"];
-            if (_cacheDirectory == null) {
+            cacheDirectory = config["CacheDirectory"];
+            if (cacheDirectory == null) {
                 throw new MissingConfigurationException("No configuration value for beatmap cache directory provided.");
             }
-            _osuRootUrl = config["OsuRootUrl"];
-            if (_osuRootUrl == null) {
+            osuRootUrl = config["OsuRootUrl"];
+            if (osuRootUrl == null) {
                 throw new MissingConfigurationException("No configuration value for osu! URL provided.");
             }
         }
 
         public WorkingBeatmap GetBeatmap(int beatmapId) {
-            var beatmapPath = Path.Combine(_cacheDirectory, beatmapId.ToString());
+            var beatmapPath = Path.Combine(cacheDirectory, beatmapId.ToString());
             if (!File.Exists(beatmapPath)) {
-                new FileWebRequest(beatmapPath, $"{_osuRootUrl}/osu/{beatmapId}").Perform();
+                new FileWebRequest(beatmapPath, $"{osuRootUrl}/osu/{beatmapId}").Perform();
             }
 
             return new FlatFileWorkingBeatmap(beatmapPath);

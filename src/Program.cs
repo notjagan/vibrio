@@ -1,7 +1,8 @@
+using Microsoft.OpenApi.Models;
 using vibrio.Beatmaps;
+using vibrio.src.Utilities;
 
-namespace vibrio.src
-{
+namespace vibrio.src {
     public class Program
     {
         public static void Main(string[] args)
@@ -16,7 +17,9 @@ namespace vibrio.src
             builder.Services.AddControllers();
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options => {
+                options.MapType<ModContainer>(() => new OpenApiSchema { Type = "string", Format = null });
+            });
 
             var app = builder.Build();
 

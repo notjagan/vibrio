@@ -1,4 +1,6 @@
 ﻿using osu.Game.Rulesets.Osu.Difficulty;
+using System.Text.Json.Serialization;
+using vibrio.src.Utilities;
 
 namespace vibrio.Models {
     public class OsuDifficulty {
@@ -14,6 +16,8 @@ namespace vibrio.Models {
         public int HitCircleCount { get; set; }
         public int SliderCount { get; set; }
         public int SpinnerCount { get; set; }
+        [JsonConverter(typeof(ModContainerListConverter))]
+        public ModContainer[] Mods { get; set; }
 
         public OsuDifficulty(OsuDifficultyAttributes attributes) {
             StarRating = attributes.StarRating;
@@ -28,6 +32,7 @@ namespace vibrio.Models {
             HitCircleCount = attributes.HitCircleCount;
             SliderCount = attributes.SliderCount;
             SpinnerCount = attributes.SpinnerCount;
+            Mods = attributes.Mods.Select(mod => new ModContainer(mod)).ToArray();
         }
     }
 }
