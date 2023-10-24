@@ -1,20 +1,19 @@
 ﻿using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu;
 using System.ComponentModel;
-using System.Text.Json.Serialization;
 
 namespace vibrio.src.Utilities {
-    [TypeConverter(typeof(ModContainerConverter))]
-    public class ModContainer {
+    [TypeConverter(typeof(ModWrapperConverter))]
+    public class ModWrapper {
         public readonly string Acronym;
         public readonly Mod? Mod;
 
-        public ModContainer(string acronym) {
+        public ModWrapper(string acronym) {
             Acronym = acronym;
             Mod = new OsuRuleset().CreateModFromAcronym(acronym);
         }
 
-        public ModContainer(Mod mod) {
+        public ModWrapper(Mod mod) {
             Acronym = mod.Acronym;
             Mod = mod;
         }

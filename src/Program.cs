@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using osu.Game.Rulesets.Mods;
 using vibrio.Beatmaps;
 using vibrio.src.Utilities;
 
@@ -14,11 +15,15 @@ namespace vibrio.src {
                 .Build();
             builder.Services.AddSingleton<IBeatmapProvider>(new LocalBeatmapCache(config));
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options => {
+                    options.JsonSerializerOptions.Converters.Add(new ModConverter());
+                });
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options => {
-                options.MapType<ModContainer>(() => new OpenApiSchema { Type = "string", Format = null });
+                options.MapType<Mod>(() => new OpenApiSchema { Type = "string", Format = null });
+                options.MapType<ModWrapper>(() => new OpenApiSchema { Type = "string", Format = null });
             });
 
             var app = builder.Build();
