@@ -5,7 +5,6 @@ using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu;
 using osu.Game.Rulesets.Osu.Difficulty;
 using vibrio.Beatmaps;
-using vibrio.src.Utilities;
 
 namespace vibrio.Controllers {
     [ApiController]
@@ -26,15 +25,12 @@ namespace vibrio.Controllers {
         }
 
         [HttpGet]
-        public ActionResult<OsuDifficultyAttributes> GetDifficulty(int beatmapId, [FromQuery] ModWrapper[] mods) {
-            foreach (var wrapper in mods) {
-                if (wrapper.Mod == null) {
-                    return BadRequest($"No mod for acronym \"{wrapper.Acronym}\".");
-                }
+        public ActionResult<OsuDifficultyAttributes> GetDifficulty(int beatmapId, [FromQuery] Mod[] mods) {
+            if (mods.Any(mod => mod == null)) {
+                return BadRequest("Unrecognized mod");
             }
-
             var beatmap = beatmaps.GetBeatmap(beatmapId);
-            return GetDifficulty(beatmap, mods.Select(wrapper => wrapper.Mod!));
+            return GetDifficulty(beatmap, mods);
         }
     }
 }
