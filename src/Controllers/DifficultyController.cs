@@ -5,6 +5,7 @@ using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu;
 using osu.Game.Rulesets.Osu.Difficulty;
 using osu.Game.Rulesets.Osu.Objects;
+using System.Net;
 using vibrio.Beatmaps;
 
 namespace vibrio.Controllers {
@@ -37,7 +38,17 @@ namespace vibrio.Controllers {
             if (mods.Any(mod => mod == null)) {
                 return BadRequest("Unrecognized mod");
             }
-            var beatmap = beatmaps.GetBeatmap(beatmapId);
+
+            WorkingBeatmap beatmap;
+            try {
+                beatmap = beatmaps.GetBeatmap(beatmapId);
+            } catch (IOException) {
+                return NotFound($"Beatmap with id {beatmapId} not found");
+            } catch (Exception exception) {
+                Console.WriteLine(exception.ToString());
+                return StatusCode(500);
+            }
+
             return GetDifficulty(beatmap, mods);
         }
     }

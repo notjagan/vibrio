@@ -22,6 +22,7 @@ namespace vibrio.Beatmaps {
             var beatmapPath = Path.Combine(cacheDirectory, beatmapId.ToString());
             if (!File.Exists(beatmapPath)) {
                 new FileWebRequest(beatmapPath, $"{osuRootUrl}/osu/{beatmapId}").Perform();
+                Console.WriteLine("hello");
             }
 
             return new FlatFileWorkingBeatmap(beatmapPath);
