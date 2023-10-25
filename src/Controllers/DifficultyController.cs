@@ -4,6 +4,7 @@ using osu.Game.Rulesets;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu;
 using osu.Game.Rulesets.Osu.Difficulty;
+using osu.Game.Rulesets.Osu.Objects;
 using vibrio.Beatmaps;
 
 namespace vibrio.Controllers {
@@ -21,10 +22,17 @@ namespace vibrio.Controllers {
 
         public static OsuDifficultyAttributes GetDifficulty(WorkingBeatmap beatmap, IEnumerable<Mod> mods) {
             var calculator = new OsuDifficultyCalculator(ruleset.RulesetInfo, beatmap);
-            return (OsuDifficultyAttributes)calculator.Calculate(mods);
+            var attributes = (OsuDifficultyAttributes)calculator.Calculate(mods);
+
+            // max combo reported by performance calculator doesn't match stable combo for some reason
+            var playableMap = beatmap.GetPlayableBeatmap(ruleset.RulesetInfo);
+            int maxCombo = playableMap.HitObjects.Count + playableMap.HitObjects.OfType<Slider>().Sum(slider => slider.NestedHitObjects.Count - 1);
+            attributes.MaxCombo = maxCombo;
+
+            return attributes;
         }
 
-        [HttpGet]
+        [HttpGet("{beatmapId}")]
         public ActionResult<OsuDifficultyAttributes> GetDifficulty(int beatmapId, [FromQuery] Mod[] mods) {
             if (mods.Any(mod => mod == null)) {
                 return BadRequest("Unrecognized mod");
