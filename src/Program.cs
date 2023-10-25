@@ -14,6 +14,8 @@ namespace vibrio.src
             var config = builder.Configuration;
             builder.Services.AddSingleton<IBeatmapProvider>(new LocalBeatmapCache(config));
 
+            builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
             var ruleset = new OsuRuleset();
             builder.Services.AddControllers()
                 .AddJsonOptions(options => {
@@ -40,6 +42,8 @@ namespace vibrio.src
             app.UseAuthorization();
 
             app.MapControllers();
+            app.MapGet("api/status", () => Results.Ok());
+
             app.Run();
         }
     }
