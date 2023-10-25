@@ -1,10 +1,10 @@
 using Microsoft.OpenApi.Models;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu;
-using vibrio.Beatmaps;
 using vibrio.src.Models;
 
-namespace vibrio.src {
+namespace vibrio.src
+{
     public class Program
     {
         public static void Main(string[] args)

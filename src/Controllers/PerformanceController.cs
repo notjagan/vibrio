@@ -6,11 +6,11 @@ using osu.Game.Rulesets.Osu;
 using osu.Game.Rulesets.Osu.Difficulty;
 using osu.Game.Scoring;
 using System.Net;
-using vibrio.Beatmaps;
 using vibrio.Controllers;
 using vibrio.src.Models;
 
-namespace vibrio.src.Controllers {
+namespace vibrio.src.Controllers
+{
     [ApiController]
     [Route("api/[controller]")]
     public class PerformanceController : ControllerBase {

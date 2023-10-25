@@ -6,9 +6,10 @@ using osu.Game.Rulesets.Osu;
 using osu.Game.Rulesets.Osu.Difficulty;
 using osu.Game.Rulesets.Osu.Objects;
 using System.Net;
-using vibrio.Beatmaps;
+using vibrio.src.Models;
 
-namespace vibrio.Controllers {
+namespace vibrio.Controllers
+{
     [ApiController]
     [Route("api/[controller]")]
     public class DifficultyController : ControllerBase {
