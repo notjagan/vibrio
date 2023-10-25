@@ -11,9 +11,7 @@ namespace vibrio.src {
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var config = builder.Configuration
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
+            var config = builder.Configuration;
             builder.Services.AddSingleton<IBeatmapProvider>(new LocalBeatmapCache(config));
 
             var ruleset = new OsuRuleset();
