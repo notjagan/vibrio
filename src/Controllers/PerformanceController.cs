@@ -14,8 +14,8 @@ namespace vibrio.src.Controllers {
     public class PerformanceController : ControllerBase {
         private readonly IBeatmapProvider beatmaps;
 
-        public PerformanceController(IBeatmapProvider beatmapsOptions) {
-            beatmaps = beatmapsOptions;
+        public PerformanceController(IBeatmapProvider beatmaps) {
+            this.beatmaps = beatmaps;
         }
 
         [HttpGet("{beatmapId}")]

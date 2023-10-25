@@ -15,8 +15,8 @@ namespace vibrio.Controllers {
 
         private readonly IBeatmapProvider beatmaps;
 
-        public DifficultyController(IBeatmapProvider beatmapsOptions) {
-            beatmaps = beatmapsOptions;
+        public DifficultyController(IBeatmapProvider beatmaps) {
+            this.beatmaps = beatmaps;
             ruleset = new OsuRuleset();
         }
 
