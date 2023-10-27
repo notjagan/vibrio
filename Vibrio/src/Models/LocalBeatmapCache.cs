@@ -18,14 +18,25 @@ namespace vibrio.src.Models {
             }
         }
 
+        public void ClearCache() {
+            var info = new DirectoryInfo(cacheDirectory);
+            if (info.Exists) {
+                info.Delete(true);
+            }
+        }
+
+        private string BeatmapPath(int beatmapId) => Path.Combine(cacheDirectory, $"{beatmapId}.osu");
+
+        public bool HasBeatmap(int beatmapId) => File.Exists(BeatmapPath(beatmapId));
+
         public WorkingBeatmap GetBeatmap(int beatmapId) {
-            var beatmapPath = Path.Combine(cacheDirectory, $"{beatmapId}.osu");
-            if (!File.Exists(beatmapPath)) {
-                new FileWebRequest(beatmapPath, $"{osuRootUrl}/osu/{beatmapId}").Perform();
+            var path = BeatmapPath(beatmapId);
+            if (!File.Exists(path)) {
+                new FileWebRequest(path, $"{osuRootUrl}/osu/{beatmapId}").Perform();
                 Console.WriteLine("hello");
             }
 
-            return new FlatFileWorkingBeatmap(beatmapPath);
+            return new FlatFileWorkingBeatmap(path);
         }
     }
 }
