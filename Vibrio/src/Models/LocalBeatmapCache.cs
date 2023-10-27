@@ -33,7 +33,6 @@ namespace vibrio.src.Models {
             var path = BeatmapPath(beatmapId);
             if (!File.Exists(path)) {
                 new FileWebRequest(path, $"{osuRootUrl}/osu/{beatmapId}").Perform();
-                Console.WriteLine("hello");
             }
 
             return new FlatFileWorkingBeatmap(path);

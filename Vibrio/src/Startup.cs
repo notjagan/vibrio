@@ -5,7 +5,7 @@ using vibrio.src.Models;
 
 namespace vibrio.src
 {
-    public class Program
+    public class Startup
     {
         public static void Main(string[] args)
         {
