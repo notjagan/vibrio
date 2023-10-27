@@ -69,5 +69,15 @@ namespace Vibrio.Tests.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] _2042429_osu {
+            get {
+                object obj = ResourceManager.GetObject("2042429.osu", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

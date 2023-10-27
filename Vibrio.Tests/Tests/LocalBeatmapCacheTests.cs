@@ -20,6 +20,7 @@ namespace Vibrio.Tests.Tests {
 
         [Theory]
         [InlineData(1001682)]
+        [InlineData(2042429)]
         public void Lookup_beatmap(int beatmapId) {
             Assert.False(cache.HasBeatmap(beatmapId));
             var beatmap = cache.GetBeatmap(beatmapId);
