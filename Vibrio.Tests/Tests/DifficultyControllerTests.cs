@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using NUnit.Framework.Interfaces;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu.Difficulty;
 using System.Text.Json;
@@ -51,9 +50,7 @@ namespace Vibrio.Tests.Tests {
             Assert.Equal(maxCombo, attributes.MaxCombo);
         }
 
-        [Theory]
-        [MemberData(nameof(EndpointTestData))]
-        public async Task Verify_difficulty_endpoint_results(int beatmapId, Mod[] mods, float starRating, int maxCombo) {
+        public async Task<OsuDifficultyAttributes?> RequestDifficulty(HttpClient client, int beatmapId, Mod[] mods) {
             var builder = new UriBuilder(new Uri(client.BaseAddress!, $"api/difficulty/{beatmapId}"));
             var query = HttpUtility.ParseQueryString(builder.Query);
             foreach (var mod in mods) {
@@ -62,10 +59,17 @@ namespace Vibrio.Tests.Tests {
             builder.Query = query.ToString();
 
             var response = await client.GetAsync(builder.Uri);
-            var body = await response.Content.ReadAsStringAsync();
-            var attributes = JsonSerializer.Deserialize<OsuDifficultyAttributes>(body, serializerOptions);
-
             Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+            var body = await response.Content.ReadAsStringAsync();
+
+            return JsonSerializer.Deserialize<OsuDifficultyAttributes>(body, serializerOptions);
+        }
+
+        [Theory]
+        [MemberData(nameof(EndpointTestData))]
+        public async Task Verify_difficulty_endpoint_results(int beatmapId, Mod[] mods, float starRating, int maxCombo) {
+            var attributes = await RequestDifficulty(client, beatmapId, mods);
+
             Assert.NotNull(attributes);
             Assert.Equal(mods.Select(mod => mod.Acronym), attributes!.Mods.Select(mod => mod.Acronym));
             Assert.InRange(attributes.StarRating, starRating - 0.03, starRating + 0.03);
