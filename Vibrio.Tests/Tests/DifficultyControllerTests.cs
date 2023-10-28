@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu.Difficulty;
+using osu.Game.Rulesets.Osu.Mods;
 using System.Text.Json;
 using System.Web;
 using vibrio.Controllers;
@@ -17,31 +18,32 @@ namespace Vibrio.Tests.Tests {
 
         public DifficultyControllerTests(WebApplicationFactory<Startup> factory) {
             client = factory.WithWebHostBuilder(builder => builder.UseEnvironment("Development")).CreateClient();
-            serializerOptions = new JsonSerializerOptions() {
+            serializerOptions = new JsonSerializerOptions {
                 PropertyNameCaseInsensitive = true,
+                Converters = { new ModConverter() }
             };
-            serializerOptions.Converters.Add(new ModConverter());
         }
 
-        public void Dispose() {
-            client.DeleteAsync("api/cache");
+        public async void Dispose() {
+            await client.DeleteAsync("api/cache");
             client.Dispose();
             GC.SuppressFinalize(this);
         }
 
         public static IEnumerable<object[]> ControllerTestData =>
             DifficultyControllerTestData.TestData.Select(beatmap =>
-                new object[] { beatmap.Data, beatmap.Mods, beatmap.StarRating, beatmap.MaxCombo
-            });
+                new object[] { beatmap.Data, beatmap.Mods, beatmap.StarRating, beatmap.MaxCombo }
+            );
 
         public static IEnumerable<object[]> EndpointTestData =>
             DifficultyControllerTestData.TestData.Select(beatmap =>
-                new object[] { beatmap.Id, beatmap.Mods, beatmap.StarRating, beatmap.MaxCombo
-            });
+                new object[] { beatmap.Id, beatmap.Mods, beatmap.StarRating, beatmap.MaxCombo }
+            );
 
         [Theory]
         [MemberData(nameof(ControllerTestData))]
         public void Verify_difficulty_attributes(byte[] beatmapData, Mod[] mods, float starRating, int maxCombo) {
+            JsonSerializer.Serialize(new OsuModHidden(), serializerOptions);
             var beatmap = beatmapData.LoadBeatmap();
 
             var attributes = DifficultyController.GetDifficulty(beatmap, mods);
