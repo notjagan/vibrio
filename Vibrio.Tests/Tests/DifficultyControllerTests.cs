@@ -52,7 +52,7 @@ namespace Vibrio.Tests.Tests {
             Assert.Equal(maxCombo, attributes.MaxCombo);
         }
 
-        public async Task<OsuDifficultyAttributes?> RequestDifficulty(HttpClient client, int beatmapId, Mod[] mods) {
+        public static async Task<OsuDifficultyAttributes?> RequestDifficulty(HttpClient client, JsonSerializerOptions options, int beatmapId, Mod[] mods) {
             var builder = new UriBuilder(new Uri(client.BaseAddress!, $"api/difficulty/{beatmapId}"));
             var query = HttpUtility.ParseQueryString(builder.Query);
             foreach (var mod in mods) {
@@ -64,13 +64,13 @@ namespace Vibrio.Tests.Tests {
             Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
             var body = await response.Content.ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<OsuDifficultyAttributes>(body, serializerOptions);
+            return JsonSerializer.Deserialize<OsuDifficultyAttributes>(body, options);
         }
 
         [Theory]
         [MemberData(nameof(EndpointTestData))]
         public async Task Verify_difficulty_endpoint_results(int beatmapId, Mod[] mods, float starRating, int maxCombo) {
-            var attributes = await RequestDifficulty(client, beatmapId, mods);
+            var attributes = await RequestDifficulty(client, serializerOptions, beatmapId, mods);
 
             Assert.NotNull(attributes);
             Assert.Equal(mods.Select(mod => mod.Acronym), attributes!.Mods.Select(mod => mod.Acronym));

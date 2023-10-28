@@ -7,7 +7,6 @@ using System.Web;
 using vibrio.src;
 using vibrio.src.Models;
 using Vibrio.Tests.Utilities;
-using Xunit.Abstractions;
 
 namespace Vibrio.Tests.Tests {
     public class PerformanceControllerTests
@@ -34,20 +33,15 @@ namespace Vibrio.Tests.Tests {
                 new object[] { beatmap.Id, beatmap.Info, beatmap.Pp }
             );
 
-        [Theory]
-        [MemberData(nameof(PerformanceTestData))]
-        public async Task Verify_performance_endpoint_with_beatmap(int beatmapId, BasicScoreInfo info, double pp) {
-            var builder = new UriBuilder(new Uri(client.BaseAddress!, $"api/performance/{beatmapId}"));
-            var query = HttpUtility.ParseQueryString(builder.Query);
-            query.AddObject(info, value => {
-                if (value is Mod mod) {
-                    return mod.Acronym;
-                } else {
-                    return value.ToString()!;
-                }
-            });
-            builder.Query = query.ToString();
+        private static string SerializeScoreProperty(object value) {
+            if (value is Mod mod) {
+                return mod.Acronym;
+            } else {
+                return value.ToString()!;
+            }
+        }
 
+        private async Task Verify_performance_endpoint(UriBuilder builder, double pp) {
             var response = await client.GetAsync(builder.Uri);
             Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
             var body = await response.Content.ReadAsStringAsync();
@@ -55,6 +49,32 @@ namespace Vibrio.Tests.Tests {
 
             Assert.NotNull(attributes);
             Assert.InRange(attributes!.Total, pp - 0.05, pp + 0.05);
+        }
+
+        [Theory]
+        [MemberData(nameof(PerformanceTestData))]
+        public async Task Verify_performance_endpoint_with_beatmap(int beatmapId, BasicScoreInfo info, double pp) {
+            var builder = new UriBuilder(new Uri(client.BaseAddress!, $"api/performance/{beatmapId}"));
+            var query = HttpUtility.ParseQueryString(builder.Query);
+            query.AddObject(info, SerializeScoreProperty);
+            builder.Query = query.ToString();
+
+            await Verify_performance_endpoint(builder, pp);
+        }
+
+        [Theory]
+        [MemberData(nameof(PerformanceTestData))]
+        public async Task Verify_performance_endpoint_with_attributes(int beatmapId, BasicScoreInfo info, double pp) {
+            var difficultyAttributes = await DifficultyControllerTests.RequestDifficulty(client, serializerOptions, beatmapId, info.Mods);
+            // avoid redundant mods in query string from score info
+            difficultyAttributes!.Mods = Array.Empty<Mod>();
+            var builder = new UriBuilder(new Uri(client.BaseAddress!, $"api/performance"));
+            var query = HttpUtility.ParseQueryString(builder.Query);
+            query.AddObject(difficultyAttributes, SerializeScoreProperty);
+            query.AddObject(info, SerializeScoreProperty);
+            builder.Query = query.ToString();
+
+            await Verify_performance_endpoint(builder, pp);
         }
     }
 }

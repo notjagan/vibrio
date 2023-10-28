@@ -1,6 +1,5 @@
 ﻿using System.Collections.Specialized;
 using System.Reflection;
-using Xunit.Abstractions;
 
 namespace Vibrio.Tests.Utilities {
     public static class QueryAddObjectExtension {
