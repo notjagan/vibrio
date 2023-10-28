@@ -11,7 +11,7 @@ namespace Vibrio.Tests.Utilities {
                 if (value is object[] array) {
                     foreach (var item in array) {
                         query.Add(property.Name, serialize(item));
-                    };
+                    }
                 } else {
                     query.Add(property.Name, serialize(value));
                 }
