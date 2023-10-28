@@ -12,14 +12,9 @@ namespace Vibrio.Tests.Tests {
     public class PerformanceControllerTests
         : IClassFixture<WebApplicationFactory<Startup>>, IDisposable {
         private readonly HttpClient client;
-        private readonly JsonSerializerOptions serializerOptions;
 
         public PerformanceControllerTests(WebApplicationFactory<Startup> factory) {
             client = factory.WithWebHostBuilder(builder => builder.UseEnvironment("Development")).CreateClient();
-            serializerOptions = new JsonSerializerOptions() {
-                PropertyNameCaseInsensitive = true,
-            };
-            serializerOptions.Converters.Add(new ModConverter());
         }
 
         public async void Dispose() {
@@ -45,7 +40,7 @@ namespace Vibrio.Tests.Tests {
             var response = await client.GetAsync(builder.Uri);
             Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
             var body = await response.Content.ReadAsStringAsync();
-            var attributes = JsonSerializer.Deserialize<OsuPerformanceAttributes>(body, serializerOptions);
+            var attributes = JsonSerializer.Deserialize<OsuPerformanceAttributes>(body, RequestUtilities.SerializerOptions);
 
             Assert.NotNull(attributes);
             Assert.InRange(attributes!.Total, pp - 0.05, pp + 0.05);
@@ -65,7 +60,7 @@ namespace Vibrio.Tests.Tests {
         [Theory]
         [MemberData(nameof(PerformanceTestData))]
         public async Task Verify_performance_endpoint_with_attributes(int beatmapId, BasicScoreInfo info, double pp) {
-            var difficultyAttributes = await DifficultyControllerTests.RequestDifficulty(client, serializerOptions, beatmapId, info.Mods);
+            var difficultyAttributes = await RequestUtilities.RequestDifficulty(client, beatmapId, info.Mods);
             // avoid redundant mods in query string from score info
             difficultyAttributes!.Mods = Array.Empty<Mod>();
             var builder = new UriBuilder(new Uri(client.BaseAddress!, $"api/performance"));
