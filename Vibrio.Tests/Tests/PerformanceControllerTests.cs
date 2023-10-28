@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu.Difficulty;
+using System.Net;
 using System.Text.Json;
 using System.Web;
 using Vibrio.Models;
@@ -37,7 +38,7 @@ namespace Vibrio.Tests.Tests {
 
         private async Task Verify_performance_endpoint(UriBuilder builder, double pp) {
             var response = await client.GetAsync(builder.Uri);
-            Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var body = await response.Content.ReadAsStringAsync();
             var attributes = JsonSerializer.Deserialize<OsuPerformanceAttributes>(body, RequestUtilities.SerializerOptions);
 
