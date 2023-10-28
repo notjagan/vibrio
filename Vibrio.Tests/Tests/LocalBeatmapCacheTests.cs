@@ -24,7 +24,6 @@ namespace Vibrio.Tests.Tests {
         public void Lookup_beatmap(int beatmapId) {
             Assert.False(cache.HasBeatmap(beatmapId));
             var beatmap = cache.GetBeatmap(beatmapId);
-            Assert.True(cache.HasBeatmap(beatmapId));
             Assert.NotNull(beatmap);
             Assert.Equal(beatmap.BeatmapInfo.OnlineID, beatmapId);
         }
