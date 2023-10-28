@@ -4,8 +4,7 @@ using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu.Difficulty;
 using System.Text.Json;
 using System.Web;
-using vibrio.src;
-using vibrio.src.Models;
+using Vibrio.Models;
 using Vibrio.Tests.Utilities;
 
 namespace Vibrio.Tests.Tests {

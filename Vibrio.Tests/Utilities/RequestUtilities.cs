@@ -2,7 +2,7 @@
 using osu.Game.Rulesets.Osu.Difficulty;
 using System.Text.Json;
 using System.Web;
-using vibrio.src.Models;
+using Vibrio.Models;
 
 namespace Vibrio.Tests.Utilities {
     public static class RequestUtilities {

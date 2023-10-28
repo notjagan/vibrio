@@ -1,8 +1,8 @@
 ﻿using osu.Framework.IO.Network;
 using osu.Game.Beatmaps;
-using vibrio.src.Exceptions;
+using Vibrio.Exceptions;
 
-namespace vibrio.src.Models {
+namespace Vibrio.Models {
     public class LocalBeatmapCache : IBeatmapProvider {
         private readonly string cacheDirectory;
         private readonly string osuRootUrl;

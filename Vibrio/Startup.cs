@@ -1,14 +1,11 @@
 using Microsoft.OpenApi.Models;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu;
-using vibrio.src.Models;
+using Vibrio.Models;
 
-namespace vibrio.src
-{
-    public class Startup
-    {
-        public static void Main(string[] args)
-        {
+namespace Vibrio {
+    public class Startup {
+        public static void Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
 
             var config = builder.Configuration;
@@ -32,8 +29,7 @@ namespace vibrio.src
 
             var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
-            {
+            if (app.Environment.IsDevelopment()) {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }

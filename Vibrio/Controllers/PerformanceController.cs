@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NuGet.Packaging.Rules;
 using osu.Game.Beatmaps;
-using osu.Game.Rulesets;
-using osu.Game.Rulesets.Osu;
 using osu.Game.Rulesets.Osu.Difficulty;
-using osu.Game.Scoring;
 using System.Net;
-using vibrio.Controllers;
-using vibrio.src.Models;
+using Vibrio.Models;
 
-namespace vibrio.src.Controllers
-{
+namespace Vibrio.Controllers {
     [ApiController]
     [Route("api/[controller]")]
     public class PerformanceController : ControllerBase {

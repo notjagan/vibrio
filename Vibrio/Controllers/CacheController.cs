@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using osu.Game.Rulesets.Osu;
-using vibrio.src.Models;
+using Vibrio.Models;
 
-namespace Vibrio.src.Controllers {
+namespace Vibrio.Controllers {
     [ApiController]
     [Route("api/[controller]")]
     public class CacheController : ControllerBase {

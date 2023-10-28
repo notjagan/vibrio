@@ -1,6 +1,6 @@
 ﻿using osu.Game.Beatmaps;
 
-namespace vibrio.src.Models {
+namespace Vibrio.Models {
     public interface IBeatmapProvider {
         WorkingBeatmap GetBeatmap(int beatmapId);
         void ClearCache();

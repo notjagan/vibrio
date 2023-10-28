@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using vibrio.src.Models;
+using Vibrio.Models;
 
 namespace Vibrio.Tests.Tests {
     public class LocalBeatmapCacheTests : IDisposable {

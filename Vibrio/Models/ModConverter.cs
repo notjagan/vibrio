@@ -3,7 +3,7 @@ using osu.Game.Rulesets.Osu;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace vibrio.src.Models {
+namespace Vibrio.Models {
     public class ModConverter : JsonConverter<Mod> {
         public override bool CanConvert(Type typeToConvert) {
             return typeToConvert == typeof(Mod) || typeToConvert.IsSubclassOf(typeof(Mod)) || base.CanConvert(typeToConvert);

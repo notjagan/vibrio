@@ -1,6 +1,6 @@
 ﻿using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu.Mods;
-using vibrio.src.Models;
+using Vibrio.Models;
 
 namespace Vibrio.Tests.Tests {
     public static class PerformanceControllerTestData {

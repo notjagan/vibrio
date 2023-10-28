@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using osu.Game.Rulesets.Mods;
-using vibrio.Controllers;
-using vibrio.src;
+using Vibrio.Controllers;
 using Vibrio.Tests.Utilities;
 
 namespace Vibrio.Tests.Tests {
