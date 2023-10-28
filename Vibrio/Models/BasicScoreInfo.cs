@@ -13,7 +13,7 @@ namespace Vibrio.Models {
 
         public double GetAccuracy() {
             var total = Count300 + Count100 + Count50 + CountMiss;
-            return (double)(6 * Count300 + 2 * Count100 + Count50) / (6 * total);
+            return (double)((6 * Count300) + (2 * Count100) + Count50) / (6 * total);
         }
 
         public ScoreInfo GetScoreInfo() => new() {
