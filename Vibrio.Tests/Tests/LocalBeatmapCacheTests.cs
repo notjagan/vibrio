@@ -26,6 +26,7 @@ namespace Vibrio.Tests.Tests {
             var beatmap = cache.GetBeatmap(beatmapId);
             Assert.NotNull(beatmap);
             Assert.Equal(beatmap.BeatmapInfo.OnlineID, beatmapId);
+            Assert.True(cache.HasBeatmap(beatmapId));
         }
     }
 }

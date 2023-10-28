@@ -1,5 +1,4 @@
 {
-  // tests using shared beatmap resources cannot be parallelized
   "parallelizeAssembly": false,
   "parallelizeTestCollections": false
 }
