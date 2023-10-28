@@ -2,7 +2,7 @@
 using osu.Game.Rulesets;
 using osu.Game.Rulesets.Mods;
 
-namespace vibrio.src.Models {
+namespace Vibrio.Models {
     public class ModListModelBinderProvider : IModelBinderProvider {
         private readonly Ruleset ruleset;
 
