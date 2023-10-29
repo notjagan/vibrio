@@ -37,5 +37,14 @@ namespace Vibrio.Models {
 
             return new FlatFileWorkingBeatmap(path);
         }
+
+        public Stream GetBeatmapStream(int beatmapId) {
+            var path = BeatmapPath(beatmapId);
+            if (!File.Exists(path)) {
+                new FileWebRequest(path, $"{osuRootUrl}/osu/{beatmapId}").Perform();
+            }
+
+            return new FileStream(path, FileMode.Open, FileAccess.Read);
+        }
     }
 }

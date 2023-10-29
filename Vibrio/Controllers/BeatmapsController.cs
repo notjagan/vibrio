@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using osu.Game.Beatmaps;
+using System.Net.Mime;
 using Vibrio.Models;
 
 namespace Vibrio.Controllers {
@@ -23,6 +25,21 @@ namespace Vibrio.Controllers {
             } else {
                 return NotFound("Beatmap not stored");
             }
+        }
+
+        [HttpGet("{beatmapId}")]
+        public ActionResult GetBeatmap(int beatmapId) {
+            WorkingBeatmap beatmap;
+            try {
+                beatmap = beatmaps.GetBeatmap(beatmapId);
+            } catch (IOException) {
+                return NotFound($"Beatmap with id {beatmapId} not found");
+            } catch (Exception exception) {
+                Console.WriteLine(exception.ToString());
+                return StatusCode(500);
+            }
+
+            return File(beatmaps.GetBeatmapStream(beatmapId), MediaTypeNames.Application.Octet, $"{beatmapId}.osu");
         }
     }
 }
