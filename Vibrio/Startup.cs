@@ -9,7 +9,7 @@ namespace Vibrio {
             var builder = WebApplication.CreateBuilder(args);
 
             var config = builder.Configuration;
-            builder.Services.AddSingleton<IBeatmapProvider>(new LocalBeatmapCache(config));
+            builder.Services.AddSingleton<IBeatmapProvider>(new BeatmapCache(config));
 
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
 

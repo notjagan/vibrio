@@ -3,19 +3,15 @@ using osu.Game.Beatmaps;
 using Vibrio.Exceptions;
 
 namespace Vibrio.Models {
-    public class LocalBeatmapCache : IBeatmapProvider {
+    public class BeatmapCache : IBeatmapProvider {
         private readonly string cacheDirectory;
         private readonly string osuRootUrl;
 
-        public LocalBeatmapCache(IConfiguration config) {
-            cacheDirectory = config["CacheDirectory"];
-            if (cacheDirectory == null) {
-                throw new MissingConfigurationException("No configuration value for beatmap cache directory provided.");
-            }
-            osuRootUrl = config["OsuRootUrl"];
-            if (osuRootUrl == null) {
-                throw new MissingConfigurationException("No configuration value for osu! URL provided.");
-            }
+        public BeatmapCache(IConfiguration config) {
+            cacheDirectory = config["CacheDirectory"]
+                ?? throw new MissingConfigurationException("No configuration value for beatmap cache directory provided.");
+            osuRootUrl = config["OsuRootUrl"]
+                ?? throw new MissingConfigurationException("No configuration value for osu! URL provided.");
         }
 
         public void ClearCache() {
