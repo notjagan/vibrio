@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using osu.Framework.Extensions;
 using osu.Game.Rulesets.Mods;
 using System.Net;
 using Vibrio.Tests.Utilities;
