@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using osu.Framework.Extensions;
 using osu.Game.Rulesets.Mods;
 using System.Net;
 using Vibrio.Tests.Utilities;
@@ -38,6 +39,21 @@ namespace Vibrio.Tests.Tests {
 
             response = await client.GetAsync(endpoint);
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData(1001682)]
+        [InlineData(2042429)]
+        public async Task Download_beatmap(int beatmapId) {
+            var response = await client.GetAsync($"api/beatmaps/{beatmapId}");
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            using var stream = new MemoryStream();
+            await response.Content.CopyToAsync(stream);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            var beatmap = stream.ToArray().LoadBeatmap();
+            Assert.Equal(beatmap.BeatmapInfo.OnlineID, beatmapId);
         }
     }
 }
