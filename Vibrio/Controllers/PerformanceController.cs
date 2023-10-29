@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Osu.Difficulty;
-using System.Net;
 using Vibrio.Exceptions;
 using Vibrio.Models;
 using Vibrio.Tests.Utilities;

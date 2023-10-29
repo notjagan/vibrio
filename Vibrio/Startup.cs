@@ -10,13 +10,13 @@ namespace Vibrio {
             var builder = WebApplication.CreateBuilder(args);
 
             var config = builder.Configuration;
-            IBeatmapProvider beatmaps = new NullBeatmapProvider();
+            IBeatmapProvider beatmaps = new BeatmapDirectDownload(config);
 
             try {
-                beatmaps |= new LocalBeatmapStorage(config);
+                beatmaps = new BeatmapCache(config) | beatmaps;
             } catch (MissingConfigurationException) { }
             try {
-                beatmaps |= new BeatmapCache(config);
+                beatmaps = new LocalBeatmapStorage(config) | beatmaps;
             } catch (MissingConfigurationException) { }
 
             builder.Services.AddSingleton(beatmaps);
