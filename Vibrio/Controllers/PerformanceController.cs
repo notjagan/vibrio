@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using osu.Game.Beatmaps;
+using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu.Difficulty;
 using System.Net;
 using Vibrio.Models;
+using Vibrio.Tests.Utilities;
 
 namespace Vibrio.Controllers {
     [ApiController]
@@ -33,6 +35,21 @@ namespace Vibrio.Controllers {
         [HttpGet]
         public ActionResult<OsuPerformanceAttributes> GetPerformance([FromQuery] OsuDifficultyAttributes attributes, [FromQuery] BasicScoreInfo info) {
             return (OsuPerformanceAttributes)new OsuPerformanceCalculator().Calculate(info.GetScoreInfo(), attributes);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<OsuPerformanceAttributes>> GetPerformance(IFormFile file, [FromQuery] BasicScoreInfo info) {
+            try {
+                var beatmap = await file.LoadBeatmap();
+                if (beatmap.Beatmap.HitObjects.Count == 0) {
+                    return BadRequest("Invalid/empty beatmap file");
+                }
+
+                var attributes = DifficultyController.GetDifficulty(beatmap, info.Mods.AsEnumerable());
+                return (OsuPerformanceAttributes)new OsuPerformanceCalculator().Calculate(info.GetScoreInfo(), attributes);
+            } catch (Exception) {
+                return BadRequest($"Error while processing file");
+            }
         }
     }
 }
