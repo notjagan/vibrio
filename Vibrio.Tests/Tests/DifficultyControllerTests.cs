@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu.Difficulty;
 using System.Net;
@@ -8,7 +7,6 @@ using System.Text.Json;
 using System.Web;
 using Vibrio.Controllers;
 using Vibrio.Tests.Utilities;
-using Xunit.Abstractions;
 
 namespace Vibrio.Tests.Tests {
     public class DifficultyControllerTests
