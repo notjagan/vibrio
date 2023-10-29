@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using osu.Game.Beatmaps;
+using osu.Game.Beatmaps.Formats;
+using osu.Game.IO;
 using osu.Game.Rulesets;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu;
 using osu.Game.Rulesets.Osu.Difficulty;
 using osu.Game.Rulesets.Osu.Objects;
 using Vibrio.Models;
+using Vibrio.Tests.Utilities;
 
 namespace Vibrio.Controllers {
     [ApiController]
@@ -49,6 +52,19 @@ namespace Vibrio.Controllers {
             }
 
             return GetDifficulty(beatmap, mods);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<OsuDifficultyAttributes>> GetDifficulty(IFormFile file, [FromQuery] Mod[] mods) {
+            try {
+                var beatmap = await file.LoadBeatmap();
+                if (beatmap.Beatmap.HitObjects.Count == 0) {
+                    return BadRequest("Invalid/empty beatmap file");
+                }
+                return GetDifficulty(beatmap, mods);
+            } catch (Exception) {
+                return BadRequest($"Error while processing file");
+            }
         }
     }
 }
