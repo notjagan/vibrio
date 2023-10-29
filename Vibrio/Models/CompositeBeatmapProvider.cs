@@ -24,10 +24,8 @@ namespace Vibrio.Models {
             WorkingBeatmap beatmap;
             try {
                 beatmap = first.GetBeatmap(beatmapId);
-            } catch (BeatmapNotFoundException exception) {
-                if (second == null) {
-                    throw exception;
-                }
+            } catch (Exception ex) when (ex is BeatmapNotFoundException || ex is NotImplementedException) {
+                if (second == null) throw;
                 beatmap = second.GetBeatmap(beatmapId);
             }
 
@@ -38,10 +36,8 @@ namespace Vibrio.Models {
             Stream stream;
             try {
                 stream = first.GetBeatmapStream(beatmapId);
-            } catch (BeatmapNotFoundException exception) {
-                if (second == null) {
-                    throw exception;
-                }
+            } catch (Exception ex) when (ex is BeatmapNotFoundException || ex is NotImplementedException) {
+                if (second == null) throw;
                 stream = second.GetBeatmapStream(beatmapId);
             }
 

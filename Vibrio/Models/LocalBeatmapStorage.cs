@@ -19,9 +19,7 @@ namespace Vibrio.Models {
 
         private string GetBeatmapPath(int beatmapId) => Path.Combine(songsFolder, registry[beatmapId]);
 
-        public void ClearCache() {
-            throw new NotImplementedException();
-        }
+        public void ClearCache() => throw new NotImplementedException();
 
         public WorkingBeatmap GetBeatmap(int beatmapId) {
             if (!registry.ContainsKey(beatmapId)) {

@@ -23,8 +23,8 @@ namespace Vibrio.Controllers {
                 beatmap = beatmaps.GetBeatmap(beatmapId);
             } catch (BeatmapNotFoundException) {
                 return NotFound($"Beatmap with id {beatmapId} not found");
-            } catch (WebException exception) {
-                Console.WriteLine(exception.ToString());
+            } catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
                 return StatusCode(500);
             }
 
