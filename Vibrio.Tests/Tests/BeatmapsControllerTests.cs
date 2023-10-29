@@ -5,16 +5,17 @@ using System.Net;
 using Vibrio.Tests.Utilities;
 
 namespace Vibrio.Tests.Tests {
-    public class CacheControllerTests
+    public class BeatmapsControllerTests
         : IClassFixture<WebApplicationFactory<Startup>>, IDisposable {
         private readonly HttpClient client;
 
-        public CacheControllerTests(WebApplicationFactory<Startup> factory) {
+        public BeatmapsControllerTests(WebApplicationFactory<Startup> factory) {
             client = factory.WithWebHostBuilder(builder => builder.UseEnvironment("Development")).CreateClient();
+            client.DeleteAsync("api/beatmaps/cache").Wait();
         }
 
         public async void Dispose() {
-            await client.DeleteAsync("api/cache");
+            await client.DeleteAsync("api/beatmaps/cache");
             client.Dispose();
             GC.SuppressFinalize(this);
         }
@@ -23,7 +24,7 @@ namespace Vibrio.Tests.Tests {
         [InlineData(1001682)]
         [InlineData(2042429)]
         public async Task Check_local_cache_status_after_difficulty_request(int beatmapId) {
-            var endpoint = $"api/cache/{beatmapId}/status";
+            var endpoint = $"api/beatmaps/{beatmapId}/status";
             var response = await client.GetAsync(endpoint);
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
@@ -32,7 +33,7 @@ namespace Vibrio.Tests.Tests {
             response = await client.GetAsync(endpoint);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            response = await client.DeleteAsync("api/cache");
+            response = await client.DeleteAsync("api/beatmaps/cache");
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             response = await client.GetAsync(endpoint);

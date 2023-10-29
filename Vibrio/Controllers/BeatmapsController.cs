@@ -4,14 +4,14 @@ using Vibrio.Models;
 namespace Vibrio.Controllers {
     [ApiController]
     [Route("api/[controller]")]
-    public class CacheController : ControllerBase {
+    public class BeatmapsController : ControllerBase {
         private readonly IBeatmapProvider beatmaps;
 
-        public CacheController(IBeatmapProvider beatmaps) {
+        public BeatmapsController(IBeatmapProvider beatmaps) {
             this.beatmaps = beatmaps;
         }
 
-        [HttpDelete]
+        [HttpDelete("cache")]
         public void ClearCache() {
             beatmaps.ClearCache();
         }
@@ -21,7 +21,7 @@ namespace Vibrio.Controllers {
             if (beatmaps.HasBeatmap(beatmapId)) {
                 return Ok();
             } else {
-                return NotFound("Beatmap not in cache");
+                return NotFound("Beatmap not stored");
             }
         }
     }
