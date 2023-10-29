@@ -36,7 +36,7 @@ namespace Vibrio.Tests.Tests {
             }
         }
 
-        private async Task Verify_performance_endpoint(UriBuilder builder, double pp) {
+        private async Task Get_performance_attributes(UriBuilder builder, double pp) {
             var response = await client.GetAsync(builder.Uri);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var body = await response.Content.ReadAsStringAsync();
@@ -48,18 +48,18 @@ namespace Vibrio.Tests.Tests {
 
         [Theory]
         [MemberData(nameof(PerformanceTestData))]
-        public async Task Verify_performance_endpoint_with_beatmap(int beatmapId, BasicScoreInfo info, double pp) {
+        public async Task Get_performance_attributes_from_beatmap_id(int beatmapId, BasicScoreInfo info, double pp) {
             var builder = new UriBuilder(new Uri(client.BaseAddress!, $"api/performance/{beatmapId}"));
             var query = HttpUtility.ParseQueryString(builder.Query);
             query.AddObject(info, SerializeScoreProperty);
             builder.Query = query.ToString();
 
-            await Verify_performance_endpoint(builder, pp);
+            await Get_performance_attributes(builder, pp);
         }
 
         [Theory]
         [MemberData(nameof(PerformanceTestData))]
-        public async Task Verify_performance_endpoint_with_attributes(int beatmapId, BasicScoreInfo info, double pp) {
+        public async Task Get_performance_attributes_from_difficulty(int beatmapId, BasicScoreInfo info, double pp) {
             var difficultyAttributes = await RequestUtilities.RequestDifficulty(client, beatmapId, info.Mods);
             // avoid redundant mods in query string from score info
             difficultyAttributes!.Mods = Array.Empty<Mod>();
@@ -69,7 +69,7 @@ namespace Vibrio.Tests.Tests {
             query.AddObject(info, SerializeScoreProperty);
             builder.Query = query.ToString();
 
-            await Verify_performance_endpoint(builder, pp);
+            await Get_performance_attributes(builder, pp);
         }
     }
 }
