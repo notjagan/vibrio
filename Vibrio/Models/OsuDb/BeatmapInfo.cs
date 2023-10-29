@@ -1,17 +1,4 @@
-﻿using System.Text;
-
-namespace Vibrio.Models {
-    public class IntDoublePair {
-        public int IntValue;
-        public double DoubleValue;
-    }
-
-    public class TimingPoint {
-        public double Bpm;
-        public double Offset;
-        public Boolean IsNotInherited;
-    }
-
+﻿namespace Vibrio.Models.OsuDb {
     public class BeatmapInfo {
         public byte[] ArtistName;
         public byte[] ArtistNameUnicode;
@@ -27,10 +14,10 @@ namespace Vibrio.Models {
         public short SliderCount;
         public short SpinnerCount;
         public long LastModificationTime;
-        public Single ApproachRate;
-        public Single CircleSize;
-        public Single HpDrain;
-        public Single OverallDifficulty;
+        public float ApproachRate;
+        public float CircleSize;
+        public float HpDrain;
+        public float OverallDifficulty;
         public double SliderVelocity;
         public IntDoublePair[] StandardStarRatingInfo;
         public IntDoublePair[] TaikoStarRatingInfo;
@@ -48,7 +35,7 @@ namespace Vibrio.Models {
         public byte CtbGrade;
         public byte ManiaGrade;
         public short LocalOffset;
-        public Single StackLeniency;
+        public float StackLeniency;
         public byte GameplayMode;
         public byte[] SongSource;
         public byte[] SongTags;
@@ -121,45 +108,6 @@ namespace Vibrio.Models {
             VisualOverride = reader.ReadBoolean();
             LastModificationTime2 = reader.ReadInt32();
             ManiaScrollSpeed = reader.ReadByte();
-        }
-    }
-
-    public class OsuDb {
-        private readonly BinaryReader reader;
-
-        public int Version;
-        public int FolderCount;
-        public bool AccountUnlocked;
-        public DateTime UnlockDate;
-        public byte[] PlayerName;
-        public int BeatmapCount;
-
-        public OsuDb(BinaryReader reader) {
-            this.reader = reader;
-            Version = reader.ReadInt32();
-            FolderCount = reader.ReadInt32();
-            AccountUnlocked = reader.ReadBoolean();
-            UnlockDate = reader.ReadDateTime();
-            PlayerName = reader.ReadLEB128String();
-            BeatmapCount = reader.ReadInt32();
-        }
-
-        private Dictionary<int, string> LoadBeatmapRegistry() {
-            var registry = new Dictionary<int, string>();
-            for (int _ = 0; _ < BeatmapCount; _++) {
-                var info = new BeatmapInfo(reader);
-                registry[info.DifficultyId] = Path.Combine(
-                    Encoding.Default.GetString(info.FolderName),
-                    Encoding.Default.GetString(info.OsuFileName)
-                );
-            }
-            return registry;
-        }
-
-        public static Dictionary<int, string> LoadBeatmapRegistry(FileStream stream) {
-            var reader = new BinaryReader(stream);
-            var db = new OsuDb(reader);
-            return db.LoadBeatmapRegistry();
         }
     }
 }

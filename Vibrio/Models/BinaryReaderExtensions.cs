@@ -1,4 +1,6 @@
-﻿namespace Vibrio.Models {
+﻿using Vibrio.Models.OsuDb;
+
+namespace Vibrio.Models {
     public static class BinaryReaderExtensions {
         public static DateTime ReadDateTime(this BinaryReader reader) => DateTime.UnixEpoch.AddTicks(reader.ReadInt64());
 

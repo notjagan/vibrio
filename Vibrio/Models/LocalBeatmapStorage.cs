@@ -11,7 +11,7 @@ namespace Vibrio.Models {
             var osuFolder = config["OsuInstallFolder"]
                 ?? throw new MissingConfigurationException("No configuration value for osu! folder provided.");
             using var file = File.OpenRead(Path.Combine(osuFolder, "osu!.db"));
-            registry = OsuDb.LoadBeatmapRegistry(file);
+            registry = OsuDb.OsuDb.LoadBeatmapRegistry(file);
 
             var storage = new StableStorage(osuFolder, null);
             songsFolder = storage.GetSongStorage().GetFullPath(".");
