@@ -23,7 +23,12 @@ namespace Vibrio.Tests.Tests {
             GC.SuppressFinalize(this);
         }
 
-        public static IEnumerable<object[]> PerformanceTestData =>
+        public static IEnumerable<object[]> RawBeatmapTestData =>
+            PerformanceControllerTestData.TestData.Select(beatmap =>
+                new object[] { beatmap.Data, beatmap.Info, beatmap.Pp }
+            );
+
+        public static IEnumerable<object[]> IdTestData =>
             PerformanceControllerTestData.TestData.Select(beatmap =>
                 new object[] { beatmap.Id, beatmap.Info, beatmap.Pp }
             );
@@ -47,7 +52,7 @@ namespace Vibrio.Tests.Tests {
         }
 
         [Theory]
-        [MemberData(nameof(PerformanceTestData))]
+        [MemberData(nameof(IdTestData))]
         public async Task Get_performance_attributes_from_beatmap_id(int beatmapId, BasicScoreInfo info, double pp) {
             var builder = new UriBuilder(new Uri(client.BaseAddress!, $"api/performance/{beatmapId}"));
             var query = HttpUtility.ParseQueryString(builder.Query);
@@ -58,7 +63,7 @@ namespace Vibrio.Tests.Tests {
         }
 
         [Theory]
-        [MemberData(nameof(PerformanceTestData))]
+        [MemberData(nameof(IdTestData))]
         public async Task Get_performance_attributes_from_difficulty(int beatmapId, BasicScoreInfo info, double pp) {
             var difficultyAttributes = await RequestUtilities.RequestDifficulty(client, beatmapId, info.Mods);
             // avoid redundant mods in query string from score info
@@ -70,6 +75,23 @@ namespace Vibrio.Tests.Tests {
             builder.Query = query.ToString();
 
             await Get_performance_attributes(builder, pp);
+        }
+
+        [Theory]
+        [MemberData(nameof(RawBeatmapTestData))]
+        public async Task Get_performance_attributes_from_uploaded_file(byte[] data, BasicScoreInfo info, double pp) {
+            var builder = new UriBuilder(new Uri(client.BaseAddress!, $"api/performance"));
+            var query = HttpUtility.ParseQueryString(builder.Query);
+            query.AddObject(info, SerializeScoreProperty);
+            builder.Query = query.ToString();
+
+            var response = await client.PostAsync(builder.Uri, data.ToFormContent());
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var body = await response.Content.ReadAsStringAsync();
+            var attributes = JsonSerializer.Deserialize<OsuPerformanceAttributes>(body, RequestUtilities.SerializerOptions);
+
+            Assert.NotNull(attributes);
+            Assert.InRange(attributes!.Total, pp - 0.05, pp + 0.05);
         }
     }
 }

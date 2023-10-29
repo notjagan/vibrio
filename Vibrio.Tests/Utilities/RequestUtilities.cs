@@ -1,6 +1,8 @@
 ﻿using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu.Difficulty;
+using System.Collections.Specialized;
 using System.Net;
+using System.Reflection;
 using System.Text.Json;
 using System.Web;
 using Vibrio.Models;
@@ -25,6 +27,27 @@ namespace Vibrio.Tests.Utilities {
             var body = await response.Content.ReadAsStringAsync();
 
             return JsonSerializer.Deserialize<OsuDifficultyAttributes>(body, RequestUtilities.SerializerOptions);
+        }
+
+        public static void AddObject(this NameValueCollection query, object obj, Func<object, string> serialize) {
+            var properties = obj.GetType()
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            foreach (var property in properties) {
+                var value = property.GetValue(obj, null)!;
+                if (value is object[] array) {
+                    foreach (var item in array) {
+                        query.Add(property.Name, serialize(item));
+                    }
+                } else {
+                    query.Add(property.Name, serialize(value));
+                }
+            }
+        }
+
+        public static MultipartFormDataContent ToFormContent(this byte[] data) {
+            var stream = new MemoryStream(data);
+            var file = new StreamContent(stream);
+            return new MultipartFormDataContent { { file, "file", "file" } };
         }
     }
 }

@@ -37,8 +37,8 @@ namespace Vibrio.Tests.Tests {
 
         [Theory]
         [MemberData(nameof(RawBeatmapTestData))]
-        public void Get_difficulty_attributes(byte[] beatmapData, Mod[] mods, float starRating, int maxCombo) {
-            var beatmap = beatmapData.LoadBeatmap();
+        public void Get_difficulty_attributes(byte[] data, Mod[] mods, float starRating, int maxCombo) {
+            var beatmap = data.LoadBeatmap();
 
             var attributes = DifficultyController.GetDifficulty(beatmap, mods);
 
@@ -59,7 +59,7 @@ namespace Vibrio.Tests.Tests {
 
         [Theory]
         [MemberData(nameof(RawBeatmapTestData))]
-        public async void Get_difficulty_attributes_from_endpoint_through_file_upload(byte[] beatmapData, Mod[] mods, float starRating, int maxCombo) {
+        public async void Get_difficulty_attributes_from_endpoint_uploaded_file(byte[] data, Mod[] mods, float starRating, int maxCombo) {
             var builder = new UriBuilder(new Uri(client.BaseAddress!, $"api/difficulty"));
             var query = HttpUtility.ParseQueryString(builder.Query);
             foreach (var mod in mods) {
@@ -67,11 +67,7 @@ namespace Vibrio.Tests.Tests {
             }
             builder.Query = query.ToString();
 
-            var stream = new MemoryStream(beatmapData);
-            var file = new StreamContent(stream);
-            var content = new MultipartFormDataContent { { file, "file", "file" } };
-
-            var response = await client.PostAsync(builder.Uri, content);
+            var response = await client.PostAsync(builder.Uri, data.ToFormContent());
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var body = await response.Content.ReadAsStringAsync();
             var attributes = JsonSerializer.Deserialize<OsuDifficultyAttributes>(body, RequestUtilities.SerializerOptions);
