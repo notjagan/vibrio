@@ -2,6 +2,7 @@
 using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Osu.Difficulty;
 using System.Net;
+using Vibrio.Exceptions;
 using Vibrio.Models;
 using Vibrio.Tests.Utilities;
 
@@ -20,7 +21,7 @@ namespace Vibrio.Controllers {
             WorkingBeatmap beatmap;
             try {
                 beatmap = beatmaps.GetBeatmap(beatmapId);
-            } catch (IOException) {
+            } catch (BeatmapNotFoundException) {
                 return NotFound($"Beatmap with id {beatmapId} not found");
             } catch (WebException exception) {
                 Console.WriteLine(exception.ToString());

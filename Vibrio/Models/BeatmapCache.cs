@@ -31,13 +31,21 @@ namespace Vibrio.Models {
                 new FileWebRequest(path, $"{osuRootUrl}/osu/{beatmapId}").Perform();
             }
 
-            return new FlatFileWorkingBeatmap(path);
+            try {
+                return new FlatFileWorkingBeatmap(path);
+            } catch (IOException) {
+                throw new BeatmapNotFoundException("Invalid online beatmap");
+            }
         }
 
         public Stream GetBeatmapStream(int beatmapId) {
             var path = BeatmapPath(beatmapId);
             if (!File.Exists(path)) {
                 new FileWebRequest(path, $"{osuRootUrl}/osu/{beatmapId}").Perform();
+            }
+
+            if (new FileInfo(path).Length == 0) {
+                throw new BeatmapNotFoundException("Invalid/empty online beatmap");
             }
 
             return new FileStream(path, FileMode.Open, FileAccess.Read);

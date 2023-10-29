@@ -28,7 +28,11 @@ namespace Vibrio.Models {
                 throw new BeatmapNotFoundException("Beatmap not in osu! songs folder");
             }
 
-            return new FlatFileWorkingBeatmap(GetBeatmapPath(beatmapId));
+            try {
+                return new FlatFileWorkingBeatmap(GetBeatmapPath(beatmapId));
+            } catch (Exception ex) when (ex is IOException || ex is FileNotFoundException) {
+                throw new BeatmapNotFoundException("Missing beatmap");
+            }
         }
 
         public Stream GetBeatmapStream(int beatmapId) {
@@ -36,7 +40,11 @@ namespace Vibrio.Models {
                 throw new BeatmapNotFoundException("Beatmap not in osu! songs folder");
             }
 
-            return new FileStream(GetBeatmapPath(beatmapId), FileMode.Open, FileAccess.Read);
+            try {
+                return new FileStream(GetBeatmapPath(beatmapId), FileMode.Open, FileAccess.Read);
+            } catch (Exception ex) when (ex is IOException || ex is FileNotFoundException) {
+                throw new BeatmapNotFoundException("Missing beatmap");
+            }
         }
 
         public bool HasBeatmap(int beatmapId) => registry.ContainsKey(beatmapId);

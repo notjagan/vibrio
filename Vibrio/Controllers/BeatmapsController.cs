@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using osu.Game.Beatmaps;
 using System.Net.Mime;
+using Vibrio.Exceptions;
 using Vibrio.Models;
 
 namespace Vibrio.Controllers {
@@ -32,7 +33,7 @@ namespace Vibrio.Controllers {
             WorkingBeatmap beatmap;
             try {
                 beatmap = beatmaps.GetBeatmap(beatmapId);
-            } catch (IOException) {
+            } catch (BeatmapNotFoundException) {
                 return NotFound($"Beatmap with id {beatmapId} not found");
             } catch (Exception exception) {
                 Console.WriteLine(exception.ToString());

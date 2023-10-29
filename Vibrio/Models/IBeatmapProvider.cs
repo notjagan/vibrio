@@ -9,5 +9,7 @@ namespace Vibrio.Models {
         void ClearCache();
 
         bool HasBeatmap(int beatmapId);
+
+        public static IBeatmapProvider operator |(IBeatmapProvider first, IBeatmapProvider second) => new CompositeBeatmapProvider(first, second);
     }
 }
