@@ -16,7 +16,9 @@ namespace Vibrio.Controllers {
 
         [HttpDelete("cache")]
         public void ClearCache() {
-            beatmaps.ClearCache();
+            try {
+                beatmaps.ClearCache();
+            } catch (NotImplementedException) { }
         }
 
         [HttpGet("{beatmapId}/status")]
