@@ -1,6 +1,7 @@
 ﻿using osu.Framework.IO.Network;
 using osu.Game.Beatmaps;
 using Vibrio.Exceptions;
+using Vibrio.Tests.Utilities;
 
 namespace Vibrio.Models {
     public class BeatmapCache : IBeatmapProvider {
@@ -32,7 +33,8 @@ namespace Vibrio.Models {
             }
 
             try {
-                return new FlatFileWorkingBeatmap(path);
+                using var file = File.OpenRead(path);
+                return file.LoadBeatmap();
             } catch (IOException) {
                 throw new BeatmapNotFoundException("Invalid online beatmap");
             }

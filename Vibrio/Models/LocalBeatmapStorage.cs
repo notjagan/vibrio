@@ -1,6 +1,7 @@
 ﻿using osu.Game.Beatmaps;
 using osu.Game.IO;
 using Vibrio.Exceptions;
+using Vibrio.Tests.Utilities;
 
 namespace Vibrio.Models {
     public class LocalBeatmapStorage : IBeatmapProvider {
@@ -27,7 +28,8 @@ namespace Vibrio.Models {
             }
 
             try {
-                return new FlatFileWorkingBeatmap(GetBeatmapPath(beatmapId));
+                using var file = File.OpenRead(GetBeatmapPath(beatmapId));
+                return file.LoadBeatmap();
             } catch (Exception ex) when (ex is IOException || ex is FileNotFoundException) {
                 throw new BeatmapNotFoundException("Missing beatmap");
             }
@@ -39,7 +41,7 @@ namespace Vibrio.Models {
             }
 
             try {
-                return new FileStream(GetBeatmapPath(beatmapId), FileMode.Open, FileAccess.Read);
+                return File.OpenRead(GetBeatmapPath(beatmapId));
             } catch (Exception ex) when (ex is IOException || ex is FileNotFoundException) {
                 throw new BeatmapNotFoundException("Missing beatmap");
             }
