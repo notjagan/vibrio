@@ -1,14 +1,17 @@
-﻿namespace Vibrio.Models.OsuDb {
+﻿using osu.Game.IO.Legacy;
+
+namespace Vibrio.Models.OsuDb
+{
     public class BeatmapInfo {
-        public byte[] ArtistName;
-        public byte[] ArtistNameUnicode;
-        public byte[] SongTitle;
-        public byte[] SongTitleUnicode;
-        public byte[] CreatorName;
-        public byte[] DifficultyName;
-        public byte[] AudioFileName;
-        public byte[] BeatmapHash;
-        public byte[] OsuFileName;
+        public string ArtistName;
+        public string ArtistNameUnicode;
+        public string SongTitle;
+        public string SongTitleUnicode;
+        public string CreatorName;
+        public string DifficultyName;
+        public string AudioFileName;
+        public string BeatmapHash;
+        public string OsuFileName;
         public byte RankedStatus;
         public short HitcircleCount;
         public short SliderCount;
@@ -37,14 +40,14 @@
         public short LocalOffset;
         public float StackLeniency;
         public byte GameplayMode;
-        public byte[] SongSource;
-        public byte[] SongTags;
+        public string SongSource;
+        public string SongTags;
         public short OnlineOffset;
-        public byte[] TitleFont;
+        public string TitleFont;
         public bool IsUnplayed;
         public long LastPlayedTime;
         public bool IsOsz2;
-        public byte[] FolderName;
+        public string FolderName;
         public long LastCheckedOnlineTime;
         public bool IgnoreBeatmapSound;
         public bool IgnoreBeatmapSkin;
@@ -54,16 +57,16 @@
         public int LastModificationTime2;
         public byte ManiaScrollSpeed;
 
-        public BeatmapInfo(BinaryReader reader) {
-            ArtistName = reader.ReadLEB128String();
-            ArtistNameUnicode = reader.ReadLEB128String();
-            SongTitle = reader.ReadLEB128String();
-            SongTitleUnicode = reader.ReadLEB128String();
-            CreatorName = reader.ReadLEB128String();
-            DifficultyName = reader.ReadLEB128String();
-            AudioFileName = reader.ReadLEB128String();
-            BeatmapHash = reader.ReadLEB128String();
-            OsuFileName = reader.ReadLEB128String();
+        public BeatmapInfo(SerializationReader reader) {
+            ArtistName = reader.ReadString();
+            ArtistNameUnicode = reader.ReadString();
+            SongTitle = reader.ReadString();
+            SongTitleUnicode = reader.ReadString();
+            CreatorName = reader.ReadString();
+            DifficultyName = reader.ReadString();
+            AudioFileName = reader.ReadString();
+            BeatmapHash = reader.ReadString();
+            OsuFileName = reader.ReadString();
             RankedStatus = reader.ReadByte();
             HitcircleCount = reader.ReadInt16();
             SliderCount = reader.ReadInt16();
@@ -92,14 +95,14 @@
             LocalOffset = reader.ReadInt16();
             StackLeniency = reader.ReadInt32();
             GameplayMode = reader.ReadByte();
-            SongSource = reader.ReadLEB128String();
-            SongTags = reader.ReadLEB128String();
+            SongSource = reader.ReadString();
+            SongTags = reader.ReadString();
             OnlineOffset = reader.ReadInt16();
-            TitleFont = reader.ReadLEB128String();
+            TitleFont = reader.ReadString();
             IsUnplayed = reader.ReadBoolean();
             LastPlayedTime = reader.ReadInt64();
             IsOsz2 = reader.ReadBoolean();
-            FolderName = reader.ReadLEB128String();
+            FolderName = reader.ReadString();
             LastCheckedOnlineTime = reader.ReadInt64();
             IgnoreBeatmapSound = reader.ReadBoolean();
             IgnoreBeatmapSkin = reader.ReadBoolean();
