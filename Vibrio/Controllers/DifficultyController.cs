@@ -5,7 +5,9 @@ using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu;
 using osu.Game.Rulesets.Osu.Difficulty;
 using osu.Game.Rulesets.Osu.Objects;
+using Vibrio.Exceptions;
 using Vibrio.Models;
+using Vibrio.Tests.Utilities;
 
 namespace Vibrio.Controllers {
     [ApiController]
@@ -41,14 +43,27 @@ namespace Vibrio.Controllers {
             WorkingBeatmap beatmap;
             try {
                 beatmap = beatmaps.GetBeatmap(beatmapId);
-            } catch (IOException) {
+            } catch (BeatmapNotFoundException) {
                 return NotFound($"Beatmap with id {beatmapId} not found");
-            } catch (Exception exception) {
-                Console.WriteLine(exception.ToString());
+            } catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
                 return StatusCode(500);
             }
 
             return GetDifficulty(beatmap, mods);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<OsuDifficultyAttributes>> GetDifficulty(IFormFile file, [FromQuery] Mod[] mods) {
+            try {
+                var beatmap = await file.LoadBeatmap();
+                if (beatmap.Beatmap.HitObjects.Count == 0) {
+                    return BadRequest("Invalid/empty beatmap file");
+                }
+                return GetDifficulty(beatmap, mods);
+            } catch (Exception) {
+                return BadRequest($"Error while processing file");
+            }
         }
     }
 }

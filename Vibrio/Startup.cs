@@ -1,6 +1,7 @@
 using Microsoft.OpenApi.Models;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu;
+using Vibrio.Exceptions;
 using Vibrio.Models;
 
 namespace Vibrio {
@@ -9,7 +10,16 @@ namespace Vibrio {
             var builder = WebApplication.CreateBuilder(args);
 
             var config = builder.Configuration;
-            builder.Services.AddSingleton<IBeatmapProvider>(new LocalBeatmapCache(config));
+            IBeatmapProvider beatmaps = new BeatmapDirectDownload(config);
+
+            try {
+                beatmaps = new BeatmapCache(config) | beatmaps;
+            } catch (MissingConfigurationException) { }
+            try {
+                beatmaps = new LocalBeatmapStorage(config) | beatmaps;
+            } catch (MissingConfigurationException) { }
+
+            builder.Services.AddSingleton(beatmaps);
 
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
 

@@ -6,12 +6,14 @@ namespace Vibrio.Tests.Tests {
     public static class PerformanceControllerTestData {
         public record TestBeatmap {
             public int Id;
+            public byte[] Data;
             public Mod[] Mods;
             public BasicScoreInfo Info;
             public double Pp;
 
-            public TestBeatmap(int id, Mod[] mods, BasicScoreInfo info, double pp) {
+            public TestBeatmap(int id, byte[] data, Mod[] mods, BasicScoreInfo info, double pp) {
                 Id = id;
+                Data = data;
                 Mods = mods;
                 Info = info;
                 Pp = pp;
@@ -19,14 +21,20 @@ namespace Vibrio.Tests.Tests {
         }
 
         public static readonly TestBeatmap[] TestData = new[] {
-            new TestBeatmap(1001682, new Mod[] { new OsuModHidden(), new OsuModDoubleTime() }, new BasicScoreInfo{
-                Mods = new Mod[] { new OsuModHidden(), new OsuModDoubleTime() },
-                Count300 = 2065,
-                Count100 = 59,
-                Count50 = 0,
-                CountMiss = 2,
-                Combo = 2572,
-            }, 1233.04),
+            new TestBeatmap(
+                1001682,
+                Properties.Resources._1001682_osu,
+                new Mod[] { new OsuModHidden(), new OsuModDoubleTime() },
+                new BasicScoreInfo{
+                    Mods = new Mod[] { new OsuModHidden(), new OsuModDoubleTime() },
+                    Count300 = 2065,
+                    Count100 = 59,
+                    Count50 = 0,
+                    CountMiss = 2,
+                    Combo = 2572,
+                },
+                1233.04
+            ),
         };
     }
 }

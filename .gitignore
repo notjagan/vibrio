@@ -1,3 +1,6 @@
+# Visual Studio editor config
+.editorconfig
+
 # Local beatmap cache
 .cache/
 .test_cache/
