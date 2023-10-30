@@ -23,57 +23,50 @@ namespace Vibrio.Tests.Tests {
             GC.SuppressFinalize(this);
         }
 
-        public static IEnumerable<object[]> RawBeatmapTestData =>
-            DifficultyControllerTestData.TestData.Select(beatmap =>
-                new object[] { beatmap.Data, beatmap.Mods, beatmap.StarRating, beatmap.MaxCombo }
-            );
-
-        public static IEnumerable<object[]> IdTestData =>
-            DifficultyControllerTestData.TestData.Select(beatmap =>
-                new object[] { beatmap.Id, beatmap.Mods, beatmap.StarRating, beatmap.MaxCombo }
-            );
+        // wrapper since MemberData doesn't seem to work with definitions in other classes
+        public static IEnumerable<object[]> TestData => DifficultyControllerTestData.TestData.Select(data => new object[] { data });
 
         [Theory]
-        [MemberData(nameof(RawBeatmapTestData))]
-        public void Get_difficulty_attributes(byte[] data, Mod[] mods, float starRating, int maxCombo) {
-            var beatmap = data.LoadBeatmap();
+        [MemberData(nameof(TestData))]
+        public void Get_difficulty_attributes(DifficultyControllerTestData.TestBeatmap data) {
+            var beatmap = data.Data.LoadBeatmap();
 
-            var attributes = DifficultyController.GetDifficulty(beatmap, mods);
+            var attributes = DifficultyController.GetDifficulty(beatmap, data.Mods);
 
-            Assert.InRange(attributes.StarRating, starRating - 0.03, starRating + 0.03);
-            Assert.Equal(maxCombo, attributes.MaxCombo);
+            Assert.InRange(attributes.StarRating, data.StarRating - 0.03, data.StarRating + 0.03);
+            Assert.Equal(data.MaxCombo, attributes.MaxCombo);
         }
 
         [Theory]
-        [MemberData(nameof(IdTestData))]
-        public async Task Get_difficulty_attributes_from_endpoint(int beatmapId, Mod[] mods, float starRating, int maxCombo) {
-            var attributes = await RequestUtilities.RequestDifficulty(client, beatmapId, mods);
+        [MemberData(nameof(TestData))]
+        public async Task Get_difficulty_attributes_from_endpoint(DifficultyControllerTestData.TestBeatmap data) {
+            var attributes = await RequestUtilities.RequestDifficulty(client, data.Id, data.Mods);
 
             Assert.NotNull(attributes);
-            Assert.Equal(mods.Select(mod => mod.Acronym), attributes!.Mods.Select(mod => mod.Acronym));
-            Assert.InRange(attributes.StarRating, starRating - 0.03, starRating + 0.03);
-            Assert.Equal(maxCombo, attributes.MaxCombo);
+            Assert.Equal(data.Mods.Select(mod => mod.Acronym), attributes!.Mods.Select(mod => mod.Acronym));
+            Assert.InRange(attributes.StarRating, data.StarRating - 0.03, data.StarRating + 0.03);
+            Assert.Equal(data.MaxCombo, attributes.MaxCombo);
         }
 
         [Theory]
-        [MemberData(nameof(RawBeatmapTestData))]
-        public async void Get_difficulty_attributes_from_endpoint_uploaded_file(byte[] data, Mod[] mods, float starRating, int maxCombo) {
+        [MemberData(nameof(TestData))]
+        public async void Get_difficulty_attributes_from_endpoint_uploaded_file(DifficultyControllerTestData.TestBeatmap data) {
             var builder = new UriBuilder(new Uri(client.BaseAddress!, $"api/difficulty"));
             var query = HttpUtility.ParseQueryString(builder.Query);
-            foreach (var mod in mods) {
+            foreach (var mod in data.Mods) {
                 query.Add("mods", mod.Acronym);
             }
             builder.Query = query.ToString();
 
-            var response = await client.PostAsync(builder.Uri, data.ToFormContent("beatmap"));
+            var response = await client.PostAsync(builder.Uri, data.Data.ToFormContent("beatmap"));
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var body = await response.Content.ReadAsStringAsync();
             var attributes = JsonSerializer.Deserialize<OsuDifficultyAttributes>(body, RequestUtilities.SerializerOptions);
 
             Assert.NotNull(attributes);
-            Assert.Equal(mods.Select(mod => mod.Acronym), attributes!.Mods.Select(mod => mod.Acronym));
-            Assert.InRange(attributes.StarRating, starRating - 0.03, starRating + 0.03);
-            Assert.Equal(maxCombo, attributes.MaxCombo);
+            Assert.Equal(data.Mods.Select(mod => mod.Acronym), attributes!.Mods.Select(mod => mod.Acronym));
+            Assert.InRange(attributes.StarRating, data.StarRating - 0.03, data.StarRating + 0.03);
+            Assert.Equal(data.MaxCombo, attributes.MaxCombo);
         }
     }
 }
