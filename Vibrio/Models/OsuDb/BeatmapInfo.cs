@@ -1,7 +1,6 @@
 ﻿using osu.Game.IO.Legacy;
 
-namespace Vibrio.Models.OsuDb
-{
+namespace Vibrio.Models.OsuDb {
     public class BeatmapInfo {
         public string ArtistName;
         public string ArtistNameUnicode;

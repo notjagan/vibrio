@@ -1,15 +1,11 @@
 ﻿using osu.Game.IO.Legacy;
 
-namespace Vibrio.Models.OsuDb
-{
-    public static class SerializationReaderExtensions
-    {
-        public static IntDoublePair[] ReadStarRatingInfo(this SerializationReader reader)
-        {
+namespace Vibrio.Models.OsuDb {
+    public static class SerializationReaderExtensions {
+        public static IntDoublePair[] ReadStarRatingInfo(this SerializationReader reader) {
             var length = reader.ReadInt32();
             var array = new IntDoublePair[length];
-            for (int i = 0; i < length; i++)
-            {
+            for (int i = 0; i < length; i++) {
                 // int flag
                 reader.ReadByte();
                 var intValue = reader.ReadInt32();
@@ -23,12 +19,10 @@ namespace Vibrio.Models.OsuDb
             return array;
         }
 
-        public static TimingPoint[] ReadTimingPoints(this SerializationReader reader)
-        {
+        public static TimingPoint[] ReadTimingPoints(this SerializationReader reader) {
             var length = reader.ReadInt32();
             var array = new TimingPoint[length];
-            for (int i = 0; i < length; i++)
-            {
+            for (int i = 0; i < length; i++) {
                 var bpm = reader.ReadDouble();
                 var offset = reader.ReadDouble();
                 var isNotInherited = reader.ReadBoolean();

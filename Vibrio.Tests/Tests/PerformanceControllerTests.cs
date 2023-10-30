@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu.Difficulty;
 using System.Net;
 using System.Text.Json;
 using System.Web;
-using Vibrio.Models;
 using Vibrio.Tests.Utilities;
 
 namespace Vibrio.Tests.Tests {
