@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Osu.Difficulty;
+using osu.Game.Scoring;
 using Vibrio.Exceptions;
 using Vibrio.Models;
 using Vibrio.Tests.Utilities;
@@ -27,7 +28,7 @@ namespace Vibrio.Controllers {
                 return StatusCode(500);
             }
 
-            var attributes = DifficultyController.GetDifficulty(beatmap, info.Mods.AsEnumerable());
+            var attributes = DifficultyController.GetDifficulty(beatmap, info.Mods);
             return (OsuPerformanceAttributes)new OsuPerformanceCalculator().Calculate(info.GetScoreInfo(), attributes);
         }
 
@@ -37,18 +38,14 @@ namespace Vibrio.Controllers {
         }
 
         [HttpPost]
-        public async Task<ActionResult<OsuPerformanceAttributes>> GetPerformance(IFormFile file, [FromQuery] BasicScoreInfo info) {
-            try {
-                var beatmap = await file.LoadBeatmap();
-                if (beatmap.Beatmap.HitObjects.Count == 0) {
-                    return BadRequest("Invalid/empty beatmap file");
-                }
-
-                var attributes = DifficultyController.GetDifficulty(beatmap, info.Mods.AsEnumerable());
-                return (OsuPerformanceAttributes)new OsuPerformanceCalculator().Calculate(info.GetScoreInfo(), attributes);
-            } catch (Exception) {
-                return BadRequest($"Error while processing file");
+        public async Task<ActionResult<OsuPerformanceAttributes>> GetPerformance(IFormFile beatmap, [FromQuery] BasicScoreInfo info) {
+            var b = await beatmap.LoadBeatmap();
+            if (b.Beatmap.HitObjects.Count == 0) {
+                return BadRequest("Invalid/empty beatmap file");
             }
+
+            var attributes = DifficultyController.GetDifficulty(b, info.Mods);
+            return (OsuPerformanceAttributes)new OsuPerformanceCalculator().Calculate(info.GetScoreInfo(), attributes);
         }
     }
 }

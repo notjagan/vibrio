@@ -85,7 +85,7 @@ namespace Vibrio.Tests.Tests {
             query.AddObject(info, SerializeScoreProperty);
             builder.Query = query.ToString();
 
-            var response = await client.PostAsync(builder.Uri, data.ToFormContent());
+            var response = await client.PostAsync(builder.Uri, data.ToFormContent("beatmap"));
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var body = await response.Content.ReadAsStringAsync();
             var attributes = JsonSerializer.Deserialize<OsuPerformanceAttributes>(body, RequestUtilities.SerializerOptions);

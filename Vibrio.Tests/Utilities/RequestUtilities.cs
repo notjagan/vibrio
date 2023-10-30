@@ -44,10 +44,10 @@ namespace Vibrio.Tests.Utilities {
             }
         }
 
-        public static MultipartFormDataContent ToFormContent(this byte[] data) {
+        public static MultipartFormDataContent ToFormContent(this byte[] data, string fileName) {
             var stream = new MemoryStream(data);
             var file = new StreamContent(stream);
-            return new MultipartFormDataContent { { file, "file", "file" } };
+            return new MultipartFormDataContent { { file, fileName, fileName } };
         }
     }
 }
