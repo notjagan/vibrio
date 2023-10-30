@@ -47,5 +47,33 @@ namespace Vibrio.Controllers {
             var attributes = DifficultyController.GetDifficulty(b, info.Mods);
             return (OsuPerformanceAttributes)new OsuPerformanceCalculator().Calculate(info.GetScoreInfo(), attributes);
         }
+
+        [HttpPost("replay/{beatmapId}")]
+        public async Task<ActionResult<OsuPerformanceAttributes>> GetPerformance(IFormFile replay, int beatmapId) {
+            WorkingBeatmap beatmap;
+            try {
+                beatmap = beatmaps.GetBeatmap(beatmapId);
+            } catch (BeatmapNotFoundException) {
+                return NotFound($"Beatmap with id {beatmapId} not found");
+            } catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500);
+            }
+
+            var decoder = new BeatmapLegacyScoreDecoder(beatmap);
+            using var stream = new MemoryStream();
+            await replay.CopyToAsync(stream);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            ScoreInfo info;
+            try {
+                info = decoder.Parse(stream).ScoreInfo;
+            } catch (BeatmapMismatchException ex) {
+                return BadRequest(ex.Message);
+            }
+
+            var attributes = DifficultyController.GetDifficulty(beatmap, info.Mods);
+            return (OsuPerformanceAttributes)new OsuPerformanceCalculator().Calculate(info, attributes);
+        }
     }
 }
