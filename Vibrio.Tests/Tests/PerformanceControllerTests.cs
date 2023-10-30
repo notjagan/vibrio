@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu.Difficulty;
@@ -91,6 +92,27 @@ namespace Vibrio.Tests.Tests {
         [MemberData(nameof(TestData))]
         public async Task Get_performance_attributes_from_uploaded_replay(PerformanceControllerTestData.TestBeatmap data) {
             var response = await client.PostAsync($"api/performance/replay/{data.Id}", data.ReplayData.ToFormContent("replay"));
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var body = await response.Content.ReadAsStringAsync();
+            var attributes = JsonSerializer.Deserialize<OsuPerformanceAttributes>(body, RequestUtilities.SerializerOptions);
+
+            Assert.NotNull(attributes);
+            Assert.InRange(attributes!.Total, data.Pp - 0.05, data.Pp + 0.05);
+        }
+
+        [Theory]
+        [MemberData(nameof(TestData))]
+        public async Task Get_performance_attributes_from_uploaded_replay_and_beatmap(PerformanceControllerTestData.TestBeatmap data) {
+            using var beatmapStream = new MemoryStream(data.BeatmapData);
+            using var beatmapFile = new StreamContent(beatmapStream);
+            using var replayStream = new MemoryStream(data.ReplayData);
+            using var replayFile = new StreamContent(replayStream);
+            var content = new MultipartFormDataContent {
+                { beatmapFile, "beatmap", "beatmap" },
+                { replayFile, "replay", "replay" }
+            };
+
+            var response = await client.PostAsync($"api/performance/replay", content);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var body = await response.Content.ReadAsStringAsync();
             var attributes = JsonSerializer.Deserialize<OsuPerformanceAttributes>(body, RequestUtilities.SerializerOptions);
