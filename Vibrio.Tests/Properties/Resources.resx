@@ -124,4 +124,7 @@
   <data name="2042429.osu" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\2042429.osu;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="4429758207.osr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\4429758207.osr;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
