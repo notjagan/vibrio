@@ -27,16 +27,31 @@ namespace Vibrio.Tests.Tests {
                 1001682,
                 Properties.Resources._1001682_osu,
                 Properties.Resources._4429758207_osr,
-                new Mod[] { new OsuModHidden(), new OsuModHardRock() },
-                new BasicScoreInfo{
+                new Mod[] { new OsuModHidden(), new OsuModDoubleTime() },
+                new BasicScoreInfo {
                     Mods = new Mod[] { new OsuModHidden(), new OsuModDoubleTime() },
                     Count300 = 2019,
                     Count100 = 104,
                     Count50 = 0,
                     CountMiss = 3,
-                    Combo = 3141,
+                    Combo = 3141
                 },
                 1304.35
+            ),
+            new TestBeatmap(
+                2042429,
+                Properties.Resources._2042429_osu,
+                Properties.Resources._3974524967_osr,
+                new Mod[] { new OsuModHidden(), new OsuModDoubleTime() },
+                new BasicScoreInfo {
+                    Mods = new Mod[] { new OsuModHidden(), new OsuModDoubleTime() },
+                    Count300 = 1008,
+                    Count100 = 53,
+                    Count50 = 0,
+                    CountMiss = 6,
+                    Combo = 1183
+                },
+                931.837
             ),
         };
     }
