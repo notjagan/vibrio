@@ -2,7 +2,7 @@
 using osu.Game.Rulesets.Osu.Mods;
 using Vibrio.Models;
 
-namespace Vibrio.Tests.Tests {
+namespace Vibrio.Tests.Controllers {
     public static class PerformanceControllerTestData {
         public record TestBeatmap {
             public int Id;

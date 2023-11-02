@@ -7,7 +7,7 @@ using System.Web;
 using Vibrio.Controllers;
 using Vibrio.Tests.Utilities;
 
-namespace Vibrio.Tests.Tests {
+namespace Vibrio.Tests.Controllers {
     public class DifficultyControllerTests
         : IClassFixture<WebApplicationFactory<Startup>>, IDisposable {
         private readonly HttpClient client;

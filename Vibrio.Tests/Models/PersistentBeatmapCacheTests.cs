@@ -2,14 +2,15 @@
 using Vibrio.Models;
 
 namespace Vibrio.Tests.Tests {
-    public class BeatmapCacheTests : IDisposable {
-        private readonly BeatmapCache cache;
+    public class PersistentBeatmapCacheTests : IDisposable {
+        private readonly PersistentBeatmapCache cache;
 
-        public BeatmapCacheTests() {
+        public PersistentBeatmapCacheTests() {
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.Development.json")
                 .Build();
-            cache = new BeatmapCache(config);
+            config["CacheDirectory"] = ".test_cache";
+            cache = new PersistentBeatmapCache(config);
             cache.ClearCache();
         }
 
