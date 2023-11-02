@@ -4,12 +4,12 @@ using osu.Game.Scoring;
 
 namespace Vibrio.Models {
     public class BasicScoreInfo {
-        public int Count300 { get; set; }
-        public int Count100 { get; set; }
-        public int Count50 { get; set; }
-        public int CountMiss { get; set; }
-        public int Combo { get; set; }
-        public Mod[] Mods { get; set; } = Array.Empty<Mod>();
+        public int Count300 { get; init; }
+        public int Count100 { get; init; }
+        public int Count50 { get; init; }
+        public int CountMiss { get; init; }
+        public int Combo { get; init; }
+        public Mod[] Mods { get; init; } = Array.Empty<Mod>();
 
         public double GetAccuracy() {
             var total = Count300 + Count100 + Count50 + CountMiss;
