@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+	
+	<PropertyGroup>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+		<TrimMode>link</TrimMode>
+		<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+		<DebugSymbols>false</DebugSymbols>
+		<DebugType>None</DebugType>
+	</PropertyGroup>
+	
+	<!--TrimMode full removes necessary components due to use of reflection in web API
+		so we remove unnecessary dependencies manually instead-->
+	<Target Name="ExplicitRemoveFromFilesToBundle" BeforeTargets="GenerateSingleFileBundle" DependsOnTargets="PrepareForBundle">
+		<ItemGroup>
+			<FilesToRemoveFromBundle Include="@(FilesToBundle)" Condition="('%(Filename)' == 'osu.Game.Resources') OR ('%(Filename)' == 'avcodec-58')" />
+			<FilesToBundle Remove="@(FilesToRemoveFromBundle)" />
+		</ItemGroup>
+	</Target>
+	
+</Project>
