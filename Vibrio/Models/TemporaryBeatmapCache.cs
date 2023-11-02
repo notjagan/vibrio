@@ -4,7 +4,7 @@
 
         public TemporaryBeatmapCache(IConfiguration config)
             : base(config) {
-            directory = Guid.NewGuid().ToString();
+            directory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         }
 
         public override string CacheDirectory() => directory;
