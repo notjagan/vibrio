@@ -8,6 +8,7 @@
 		<DebugSymbols>false</DebugSymbols>
 		<DebugType>None</DebugType>
 		<IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
+		<AssemblyName>vibrio.$(RuntimeIdentifier)</AssemblyName>
 	</PropertyGroup>
 
 	<!--TrimMode full removes necessary components due to use of reflection in web API
