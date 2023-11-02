@@ -6,10 +6,8 @@ namespace Vibrio.Models {
     public class BeatmapDirectDownload : IBeatmapProvider {
         private readonly HttpClient client;
 
-        public BeatmapDirectDownload(IConfiguration config) {
-            var osuRootUrl = config["OsuRootUrl"]
-                ?? throw new MissingConfigurationException("No configuration value for osu! URL provided.");
-            client = new HttpClient { BaseAddress = new Uri(osuRootUrl) };
+        public BeatmapDirectDownload(AppConfiguration config) {
+            client = new HttpClient { BaseAddress = new Uri(config.OsuRootUrl) };
         }
 
         public void ClearCache() => throw new NotImplementedException();
