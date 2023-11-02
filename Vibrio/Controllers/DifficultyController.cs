@@ -54,16 +54,12 @@ namespace Vibrio.Controllers {
         }
 
         [HttpPost]
-        public async Task<ActionResult<OsuDifficultyAttributes>> GetDifficulty(IFormFile file, [FromQuery] Mod[] mods) {
-            try {
-                var beatmap = await file.LoadBeatmap();
-                if (beatmap.Beatmap.HitObjects.Count == 0) {
-                    return BadRequest("Invalid/empty beatmap file");
-                }
-                return GetDifficulty(beatmap, mods);
-            } catch (Exception) {
-                return BadRequest($"Error while processing file");
+        public async Task<ActionResult<OsuDifficultyAttributes>> GetDifficulty(IFormFile beatmap, [FromQuery] Mod[] mods) {
+            var b = await beatmap.LoadBeatmap();
+            if (b.Beatmap.HitObjects.Count == 0) {
+                return BadRequest("Invalid/empty beatmap file");
             }
+            return GetDifficulty(b, mods);
         }
     }
 }

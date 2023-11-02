@@ -6,14 +6,16 @@ namespace Vibrio.Tests.Tests {
     public static class PerformanceControllerTestData {
         public record TestBeatmap {
             public int Id;
-            public byte[] Data;
+            public byte[] BeatmapData;
+            public byte[] ReplayData;
             public Mod[] Mods;
             public BasicScoreInfo Info;
             public double Pp;
 
-            public TestBeatmap(int id, byte[] data, Mod[] mods, BasicScoreInfo info, double pp) {
+            public TestBeatmap(int id, byte[] data, byte[] replayData, Mod[] mods, BasicScoreInfo info, double pp) {
                 Id = id;
-                Data = data;
+                BeatmapData = data;
+                ReplayData = replayData;
                 Mods = mods;
                 Info = info;
                 Pp = pp;
@@ -24,16 +26,32 @@ namespace Vibrio.Tests.Tests {
             new TestBeatmap(
                 1001682,
                 Properties.Resources._1001682_osu,
+                Properties.Resources._4429758207_osr,
                 new Mod[] { new OsuModHidden(), new OsuModDoubleTime() },
-                new BasicScoreInfo{
+                new BasicScoreInfo {
                     Mods = new Mod[] { new OsuModHidden(), new OsuModDoubleTime() },
-                    Count300 = 2065,
-                    Count100 = 59,
+                    Count300 = 2019,
+                    Count100 = 104,
                     Count50 = 0,
-                    CountMiss = 2,
-                    Combo = 2572,
+                    CountMiss = 3,
+                    Combo = 3141
                 },
-                1233.04
+                1304.35
+            ),
+            new TestBeatmap(
+                2042429,
+                Properties.Resources._2042429_osu,
+                Properties.Resources._3974524967_osr,
+                new Mod[] { new OsuModHidden(), new OsuModDoubleTime() },
+                new BasicScoreInfo {
+                    Mods = new Mod[] { new OsuModHidden(), new OsuModDoubleTime() },
+                    Count300 = 1008,
+                    Count100 = 53,
+                    Count50 = 0,
+                    CountMiss = 6,
+                    Combo = 1183
+                },
+                931.837
             ),
         };
     }
