@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Web;
 using Vibrio.Tests.Utilities;
 
-namespace Vibrio.Tests.Tests {
+namespace Vibrio.Tests.Controllers {
     public class PerformanceControllerTests
         : IClassFixture<WebApplicationFactory<Startup>>, IDisposable {
         private readonly HttpClient client;

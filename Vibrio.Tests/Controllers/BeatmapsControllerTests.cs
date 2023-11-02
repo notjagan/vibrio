@@ -4,7 +4,7 @@ using osu.Game.Rulesets.Mods;
 using System.Net;
 using Vibrio.Tests.Utilities;
 
-namespace Vibrio.Tests.Tests {
+namespace Vibrio.Tests.Controllers {
     public class BeatmapsControllerTests
         : IClassFixture<WebApplicationFactory<Startup>>, IDisposable {
         private readonly HttpClient client;
