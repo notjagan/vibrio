@@ -10,7 +10,7 @@ namespace Vibrio.Models {
         public BeatmapCache(IConfiguration config) {
             var value = config["UseCaching"];
             if (!bool.TryParse(value, out bool useCaching) || !useCaching) {
-                throw new MissingConfigurationException("Caching is not enabled");
+                throw new MissingConfigurationException("Caching is not enabled.");
             }
             osuRootUrl = config["OsuRootUrl"]
                 ?? throw new MissingConfigurationException("No configuration value for osu! URL provided.");
