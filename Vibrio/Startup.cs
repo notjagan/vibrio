@@ -13,6 +13,9 @@ namespace Vibrio {
             IBeatmapProvider beatmaps = new BeatmapDirectDownload(config);
 
             try {
+                beatmaps = new TemporaryBeatmapCache(config) | beatmaps;
+            } catch (MissingConfigurationException) { }
+            try {
                 beatmaps = new PersistentBeatmapCache(config) | beatmaps;
             } catch (MissingConfigurationException) { }
             try {
