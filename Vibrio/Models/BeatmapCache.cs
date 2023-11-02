@@ -4,8 +4,7 @@ using Vibrio.Exceptions;
 using Vibrio.Tests.Utilities;
 
 namespace Vibrio.Models {
-    public class BeatmapCache : IBeatmapProvider {
-        private readonly string cacheDirectory;
+    public abstract class BeatmapCache : IBeatmapProvider {
         private readonly string osuRootUrl;
 
         public BeatmapCache(IConfiguration config) {
@@ -13,20 +12,20 @@ namespace Vibrio.Models {
             if (!bool.TryParse(value, out bool useCaching) || !useCaching) {
                 throw new MissingConfigurationException("Caching is not enabled");
             }
-            cacheDirectory = config["CacheDirectory"]
-                ?? throw new MissingConfigurationException("No configuration value for beatmap cache directory provided.");
             osuRootUrl = config["OsuRootUrl"]
                 ?? throw new MissingConfigurationException("No configuration value for osu! URL provided.");
         }
 
+        public abstract string CacheDirectory();
+
+        public string BeatmapPath(int beatmapId) => Path.Combine(CacheDirectory(), Path.ChangeExtension(beatmapId.ToString(), "osu"));
+
         public void ClearCache() {
-            var info = new DirectoryInfo(cacheDirectory);
+            var info = new DirectoryInfo(CacheDirectory());
             if (info.Exists) {
                 info.Delete(true);
             }
         }
-
-        private string BeatmapPath(int beatmapId) => Path.Combine(cacheDirectory, $"{beatmapId}.osu");
 
         public bool HasBeatmap(int beatmapId) => File.Exists(BeatmapPath(beatmapId));
 
