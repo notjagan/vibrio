@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vibrio", "Vibrio\Vibrio.csproj", "{CBA80C35-7F47-4558-9279-2EDC28FA5F80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vibrio.Tests", "Vibrio.Tests\Vibrio.Tests.csproj", "{2B0D7B5C-8C72-485E-AAEA-922156CD9722}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vibrio.Tests", "Vibrio.Tests\Vibrio.Tests.csproj", "{2B0D7B5C-8C72-485E-AAEA-922156CD9722}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
