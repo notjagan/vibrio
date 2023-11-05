@@ -1,0 +1,11 @@
+<Project>
+	<PropertyGroup>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+		<TrimMode>link</TrimMode>
+		<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+		<DebugSymbols>false</DebugSymbols>
+		<DebugType>None</DebugType>
+		<IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
+		<AssemblyName>vibrio.$(RuntimeIdentifier)</AssemblyName>
+	</PropertyGroup>
+</Project>

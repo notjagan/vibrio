@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-
-	<PropertyGroup>
-		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-		<TrimMode>link</TrimMode>
-		<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
-		<DebugSymbols>false</DebugSymbols>
-		<DebugType>None</DebugType>
-		<IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
-		<AssemblyName>vibrio.$(RuntimeIdentifier)</AssemblyName>
-	</PropertyGroup>
-
 	<!--TrimMode full removes necessary components due to use of reflection in web API
 		so we remove unnecessary dependencies manually instead-->
 	<Target Name="ExplicitRemoveFromFilesToBundle" BeforeTargets="GenerateSingleFileBundle" DependsOnTargets="PrepareForBundle">
@@ -23,5 +12,4 @@
 	<ItemGroup>
 		<Content Update="appsettings*.json" CopyToPublishDirectory="Never" />
 	</ItemGroup>
-
 </Project>
