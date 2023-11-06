@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+	<!--TrimMode full removes necessary components due to use of reflection in web API
+		so we remove unnecessary dependencies manually instead-->
+	<Target Name="ExplicitRemoveFromFilesToBundle" BeforeTargets="GenerateSingleFileBundle" DependsOnTargets="PrepareForBundle">
+		<ItemGroup>
+			<FilesToRemoveFromBundle Include="@(FilesToBundle)" Condition="('%(Filename)' == 'osu.Game.Resources') OR ('%(Filename)' == 'avcodec-58')" />
+			<FilesToBundle Remove="@(FilesToRemoveFromBundle)" />
+		</ItemGroup>
+	</Target>
+
+	<ItemGroup>
+		<Content Update="appsettings*.json" CopyToPublishDirectory="Never" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<FinalPublishDirectory>$(ProjectDir)\..\publish</FinalPublishDirectory>
+	</PropertyGroup>
+
+	<Target Name="PublishAll">
+		<ItemGroup>
+			<_PublishRuntimeIdentifier Include="$(RuntimeIdentifiers)" />
+		</ItemGroup>
+		<MSBuild Projects="$(MSBuildProjectFile)" Targets="Clean" />
+		<MSBuild Projects="$(MSBuildProjectFile)" Targets="Restore" />
+		<MSBuild Projects="$(MSBuildProjectFile)" Targets="Publish" Properties="RuntimeIdentifier=%(_PublishRuntimeIdentifier.Identity);AssemblyName=vibrio.%(_PublishRuntimeIdentifier.Identity)" />
+	</Target>
+
+	<Target Name="FullClean" AfterTargets="Clean">
+		<RemoveDir Directories="$(TargetDir)" />
+		<RemoveDir Directories="$(FinalPublishDirectory)" />
+		<MakeDir Directories="$(FinalPublishDirectory)" />
+	</Target>
+
+	<Target Name="ZipExecutable" AfterTargets="Publish">
+		<ZipDirectory SourceDirectory="$(PublishDir)" DestinationFile="$(FinalPublishDirectory)\vibrio.$(RuntimeIdentifier).zip" />
+	</Target>
+</Project>

@@ -8,8 +8,8 @@ namespace Vibrio.Models {
         private readonly Dictionary<int, string> registry;
         private readonly string songsFolder;
 
-        public LocalBeatmapStorage(IConfiguration config) {
-            var osuFolder = config["OsuInstallFolder"]
+        public LocalBeatmapStorage(AppConfiguration config) {
+            var osuFolder = config.OsuInstallFolder
                 ?? throw new MissingConfigurationException("No configuration value for osu! folder provided.");
             using var file = File.OpenRead(Path.Combine(osuFolder, "osu!.db"));
             registry = OsuDb.OsuDb.LoadBeatmapRegistry(file);

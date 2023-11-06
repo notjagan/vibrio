@@ -7,13 +7,11 @@ namespace Vibrio.Models {
     public abstract class BeatmapCache : IBeatmapProvider {
         private readonly string osuRootUrl;
 
-        public BeatmapCache(IConfiguration config) {
-            var value = config["UseCaching"];
-            if (!bool.TryParse(value, out bool useCaching) || !useCaching) {
+        public BeatmapCache(AppConfiguration config) {
+            if (!config.UseCaching) {
                 throw new MissingConfigurationException("Caching is not enabled.");
             }
-            osuRootUrl = config["OsuRootUrl"]
-                ?? throw new MissingConfigurationException("No configuration value for osu! URL provided.");
+            osuRootUrl = config.OsuRootUrl;
         }
 
         public abstract string CacheDirectory();

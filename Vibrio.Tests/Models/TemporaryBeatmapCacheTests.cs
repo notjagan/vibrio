@@ -9,7 +9,7 @@ namespace Vibrio.Tests.Tests {
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.Development.json")
                 .Build();
-            cache = new TemporaryBeatmapCache(config);
+            cache = new TemporaryBeatmapCache(config.Get<AppConfiguration>());
             cache.ClearCache();
         }
 

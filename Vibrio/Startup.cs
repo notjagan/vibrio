@@ -9,7 +9,7 @@ namespace Vibrio {
         public static void Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
 
-            var config = builder.Configuration;
+            var config = builder.Configuration.Get<AppConfiguration>();
             IBeatmapProvider beatmaps = new BeatmapDirectDownload(config);
 
             try {
