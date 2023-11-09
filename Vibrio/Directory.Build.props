@@ -20,5 +20,6 @@
 		<DebugType>None</DebugType>
 		<IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
 		<Configuration>Release</Configuration>
+		<InvariantGlobalization>true</InvariantGlobalization>
 	</PropertyGroup>
 </Project>
