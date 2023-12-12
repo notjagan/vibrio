@@ -66,11 +66,7 @@ namespace Vibrio.Controllers {
             stream.Seek(0, SeekOrigin.Begin);
 
             ScoreInfo info;
-            try {
-                info = decoder.Parse(stream).ScoreInfo;
-            } catch (BeatmapMismatchException ex) {
-                return BadRequest(ex.Message);
-            }
+            info = decoder.Parse(stream).ScoreInfo;
 
             var attributes = DifficultyController.GetDifficulty(beatmap, info.Mods);
             return (OsuPerformanceAttributes)new OsuPerformanceCalculator().Calculate(info, attributes);
@@ -89,11 +85,7 @@ namespace Vibrio.Controllers {
             stream.Seek(0, SeekOrigin.Begin);
 
             ScoreInfo info;
-            try {
-                info = decoder.Parse(stream).ScoreInfo;
-            } catch (BeatmapMismatchException ex) {
-                return BadRequest(ex.Message);
-            }
+            info = decoder.Parse(stream).ScoreInfo;
 
             var attributes = DifficultyController.GetDifficulty(b, info.Mods);
             return (OsuPerformanceAttributes)new OsuPerformanceCalculator().Calculate(info, attributes);

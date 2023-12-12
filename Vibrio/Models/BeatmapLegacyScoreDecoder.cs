@@ -16,13 +16,7 @@ namespace Vibrio.Models {
             };
         }
 
-        protected override WorkingBeatmap GetBeatmap(string md5Hash) {
-            if (beatmap.BeatmapInfo.Hash != md5Hash) {
-                throw new BeatmapMismatchException("Provided beatmap does not match map used in replay");
-            }
-
-            return beatmap;
-        }
+        protected override WorkingBeatmap GetBeatmap(string md5Hash) => beatmap;
 
         protected override Ruleset GetRuleset(int rulesetId) {
             var info = rulesets.FirstOrDefault(r => r.OnlineID == rulesetId)
